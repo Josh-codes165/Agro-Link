@@ -11,7 +11,6 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import "../../src/";
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },

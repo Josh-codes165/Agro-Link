@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { EllipsisVertical } from "lucide-react";
 import DashboardLayout from "../components/DashboardLayout";
 import "../styles/listings.css";
@@ -23,6 +24,7 @@ const listings = [
 
 export default function MyListings() {
   const [activeTab, setActiveTab] = useState("active");
+  const navigate = useNavigate()
 
   return (
     <DashboardLayout>
@@ -31,7 +33,7 @@ export default function MyListings() {
           <h1>My Listings</h1>
           <p>View and manage all your crop listings</p>
         </div>
-        <button className="btn-primary">Add new listing</button>
+        <button onClick={() => navigate("/listings/add")} className="btn-primary">Add new listing</button>
       </header>
 
       <nav className="tabs">

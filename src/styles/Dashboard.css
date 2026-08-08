@@ -25,10 +25,10 @@
   list-style: none;
 }
 
-.sidebar li {
+/* .sidebar li {
   margin: 20px 0;
   cursor: pointer;
-}
+} */
 
 .main-content {
   flex: 1;

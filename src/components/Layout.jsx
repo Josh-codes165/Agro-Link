@@ -1,89 +1,91 @@
 import { NavLink, Outlet } from "react-router-dom";
+import {
+  FiHome,
+  FiGrid,
+  FiUsers,
+  FiShoppingCart,
+  FiMessageCircle,
+  FiCreditCard,
+  FiBarChart2,
+  FiUser,
+  FiSettings,
+} from "react-icons/fi";
+
 import "../styles/Dashboard.css";
 
 function Layout() {
   return (
     <div className="dashboard">
 
-      {/* ===========================
-          SIDEBAR
-      =========================== */}
-
+      {/* Sidebar */}
       <aside className="sidebar">
 
-        <h2 className="logo">Ubani</h2>
+        <h2 className="logo">UBANI</h2>
 
         <ul>
 
-          {/* Dashboard */}
           <li>
             <NavLink to="/" className="nav-link">
-              🏠 Dashboard
+              <FiHome />
+              <span>Dashboard</span>
             </NavLink>
           </li>
 
-          {/* My Listings */}
           <li>
-            <NavLink to="/crops" className="nav-link">
-              🌾 My Listings
+            <NavLink to="/listings" className="nav-link">
+              <FiGrid />
+              <span>My Listings</span>
             </NavLink>
           </li>
 
-          {/* Buyer Requests */}
           <li>
             <NavLink to="/buyer-requests" className="nav-link">
-              👥 Buyer Requests
+              <FiUsers />
+              <span>Buyer Requests</span>
             </NavLink>
           </li>
 
-          {/* Orders */}
           <li>
             <NavLink to="/orders" className="nav-link">
-              🛒 Orders
+              <FiShoppingCart />
+              <span>Orders</span>
             </NavLink>
           </li>
 
-          {/* Messages */}
           <li>
             <NavLink to="/messages" className="nav-link">
-              💬 Messages
+              <FiMessageCircle />
+              <span>Messages</span>
             </NavLink>
           </li>
 
-          {/* Payments */}
           <li>
             <NavLink to="/payments" className="nav-link">
-              💳 Payments
+              <FiCreditCard />
+              <span>Payments</span>
             </NavLink>
           </li>
 
-          {/* Market Insights */}
           <li>
             <NavLink to="/market-insights" className="nav-link">
-              📊 Market Insights
+              <FiBarChart2 />
+              <span>Market Insights</span>
             </NavLink>
           </li>
 
           <hr />
 
-          {/* Profile */}
           <li>
             <NavLink to="/profile" className="nav-link">
-              👤 Profile
+              <FiUser />
+              <span>Profile</span>
             </NavLink>
           </li>
 
-          {/* Settings */}
           <li>
             <NavLink to="/settings" className="nav-link">
-              ⚙️ Settings
-            </NavLink>
-          </li>
-
-          {/* Log Out */}
-          <li>
-            <NavLink to="/" className="nav-link">
-              🚪 Log Out
+              <FiSettings />
+              <span>Settings</span>
             </NavLink>
           </li>
 
@@ -91,10 +93,7 @@ function Layout() {
 
       </aside>
 
-      {/* ===========================
-          PAGE CONTENT
-      =========================== */}
-
+      {/* Page Content */}
       <Outlet />
 
     </div>

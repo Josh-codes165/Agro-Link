@@ -1,235 +1,515 @@
 import { useState, useEffect } from "react";
+import {
+  FiPlus,
+  FiEdit2,
+  FiTrash2,
+} from "react-icons/fi";
 import "../styles/Dashboard.css";
 
 function Crops() {
-  const [crops, setCrops] = useState(() => {
-    const savedCrops = localStorage.getItem("crops");
+  const farmerName =
+    localStorage.getItem("farmerName") || "Farmer";
 
-    return savedCrops
-      ? JSON.parse(savedCrops)
-      : [
-          {
-            name: "Maize",
-            farm: "Farm A",
-            planting: "12 Aug 2026",
-            harvest: "20 Nov 2026",
-            status: "🌱 Growing",
-          },
-          {
-            name: "Tomatoes",
-            farm: "Farm B",
-            planting: "02 Jul 2026",
-            harvest: "18 Sep 2026",
-            status: "🍅 Ready",
-          },
-          {
-            name: "Rice",
-            farm: "Farm C",
-            planting: "15 Jun 2026",
-            harvest: "30 Oct 2026",
-            status: "🌾 Growing",
-          },
-        ];
+  const storageKey = `crops_${farmerName}`;
+
+  const [crops, setCrops] = useState(() => {
+    const savedCrops = localStorage.getItem(storageKey);
+
+    if (!savedCrops) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(savedCrops);
+    } catch {
+      return [];
+    }
   });
 
   const [showForm, setShowForm] = useState(false);
 
   const [newCrop, setNewCrop] = useState({
     name: "",
-    farm: "",
-    planting: "",
-    harvest: "",
-    status: "🌱 Growing",
+    quantity: "",
+    price: "",
+    status: "Active",
   });
 
   const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("crops", JSON.stringify(crops));
-  }, [crops]);
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(crops)
+    );
+  }, [crops, storageKey]);
 
-  // Add or Update Crop
+  /* =========================
+     LISTING COUNTS
+  ========================= */
+
+  const activeListings = crops.filter(
+    (crop) => crop.status === "Active"
+  ).length;
+
+  const inactiveListings = crops.filter(
+    (crop) => crop.status === "Inactive"
+  ).length;
+
+
+  /* =========================
+     ADD / UPDATE CROP
+  ========================= */
+
   const handleAddCrop = () => {
     if (
-      !newCrop.name ||
-      !newCrop.farm ||
-      !newCrop.planting ||
-      !newCrop.harvest
+      !newCrop.name.trim() ||
+      !newCrop.quantity.trim() ||
+      !newCrop.price.trim()
     ) {
-      alert("Please fill in all fields.");
+      alert(
+        "Please fill in the crop, quantity and price."
+      );
+
       return;
     }
 
     if (editingIndex !== null) {
       const updatedCrops = [...crops];
-      updatedCrops[editingIndex] = newCrop;
+
+      updatedCrops[editingIndex] = {
+        ...updatedCrops[editingIndex],
+        ...newCrop,
+        name: newCrop.name.trim(),
+        quantity: newCrop.quantity.trim(),
+        price: newCrop.price.trim(),
+      };
+
       setCrops(updatedCrops);
       setEditingIndex(null);
     } else {
-      setCrops([...crops, newCrop]);
+      setCrops([
+        ...crops,
+        {
+          ...newCrop,
+          name: newCrop.name.trim(),
+          quantity: newCrop.quantity.trim(),
+          price: newCrop.price.trim(),
+          views: 0,
+          requests: 0,
+        },
+      ]);
     }
 
     setNewCrop({
       name: "",
-      farm: "",
-      planting: "",
-      harvest: "",
-      status: "🌱 Growing",
+      quantity: "",
+      price: "",
+      status: "Active",
     });
 
     setShowForm(false);
   };
 
-  // Delete Crop
+
+  /* =========================
+     DELETE CROP
+  ========================= */
+
   const handleDeleteCrop = (indexToDelete) => {
-    const updatedCrops = crops.filter(
-      (_, index) => index !== indexToDelete
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this crop?"
     );
 
-    setCrops(updatedCrops);
+    if (!confirmDelete) return;
 
-    if (editingIndex === indexToDelete) {
-      setEditingIndex(null);
-      setShowForm(false);
-    }
+    setCrops(
+      crops.filter(
+        (_, index) => index !== indexToDelete
+      )
+    );
   };
 
-  // Edit Crop
+
+  /* =========================
+     EDIT CROP
+  ========================= */
+
   const handleEditCrop = (index) => {
-    setNewCrop(crops[index]);
+    setNewCrop({
+      name: crops[index].name || "",
+      quantity: crops[index].quantity || "",
+      price: crops[index].price || "",
+      status: crops[index].status || "Active",
+    });
+
     setEditingIndex(index);
     setShowForm(true);
   };
 
+
+  /* =========================
+     OPEN ADD FORM
+  ========================= */
+
+  const openAddForm = () => {
+    setEditingIndex(null);
+
+    setNewCrop({
+      name: "",
+      quantity: "",
+      price: "",
+      status: "Active",
+    });
+
+    setShowForm(true);
+  };
+
+
+  /* =========================
+     PAGE
+  ========================= */
+
   return (
-    <main className="main-content">
+    <div className="listings-page">
+
+      {/* =========================
+          PAGE HEADER
+      ========================= */}
+
       <div className="topbar">
+
         <div>
-          <h2>🌾 Crops</h2>
-          <p>Manage all your crops in one place.</p>
+          <h2>My Listings</h2>
+
+          <p>
+            Manage and keep track of all your
+            crops in one place.
+          </p>
         </div>
 
         <button
           className="add-btn"
-          onClick={() => {
-            setEditingIndex(null);
-            setNewCrop({
-              name: "",
-              farm: "",
-              planting: "",
-              harvest: "",
-              status: "🌱 Growing",
-            });
-            setShowForm(true);
-          }}
+          onClick={openAddForm}
         >
-          + Add Crop
+          <FiPlus />
+          Add New Listing
         </button>
+
       </div>
+
+
+      {/* =========================
+          SUMMARY CARDS
+      ========================= */}
+
+      <div className="listing-summary">
+
+        <div className="listing-summary-card">
+          <span>Total Listings</span>
+
+          <h2>
+            {crops.length}
+          </h2>
+        </div>
+
+
+        <div className="listing-summary-card">
+          <span>Active</span>
+
+          <h2>
+            {activeListings}
+          </h2>
+        </div>
+
+
+        <div className="listing-summary-card">
+          <span>Inactive</span>
+
+          <h2>
+            {inactiveListings}
+          </h2>
+        </div>
+
+      </div>
+
+
+      {/* =========================
+          ADD / EDIT FORM
+      ========================= */}
 
       {showForm && (
         <div className="crop-form">
+
           <h3>
-            {editingIndex !== null ? "Edit Crop" : "Add New Crop"}
+            {editingIndex !== null
+              ? "Edit Listing"
+              : "Add New Listing"}
           </h3>
 
-          <input
-            type="text"
-            placeholder="Crop Name"
-            value={newCrop.name}
-            onChange={(e) =>
-              setNewCrop({ ...newCrop, name: e.target.value })
-            }
-          />
 
-          <input
-            type="text"
-            placeholder="Farm Name"
-            value={newCrop.farm}
-            onChange={(e) =>
-              setNewCrop({ ...newCrop, farm: e.target.value })
-            }
-          />
+          <div className="form-grid">
 
-          <input
-            type="date"
-            value={newCrop.planting}
-            onChange={(e) =>
-              setNewCrop({ ...newCrop, planting: e.target.value })
-            }
-          />
+            {/* Crop Name */}
 
-          <input
-            type="date"
-            value={newCrop.harvest}
-            onChange={(e) =>
-              setNewCrop({ ...newCrop, harvest: e.target.value })
-            }
-          />
+            <input
+              type="text"
+              placeholder="Crop Name"
+              value={newCrop.name}
+              onChange={(e) =>
+                setNewCrop({
+                  ...newCrop,
+                  name: e.target.value,
+                })
+              }
+            />
 
-          <select
-            value={newCrop.status}
-            onChange={(e) =>
-              setNewCrop({ ...newCrop, status: e.target.value })
-            }
-          >
-            <option>🌱 Growing</option>
-            <option>🍅 Ready</option>
-            <option>🌾 Harvested</option>
-          </select>
 
-          <button
-            className="add-btn"
-            onClick={handleAddCrop}
-          >
-            {editingIndex !== null ? "Update Crop" : "Save Crop"}
-          </button>
+            {/* Quantity */}
+
+            <input
+              type="text"
+              placeholder="Quantity e.g. 500kg"
+              value={newCrop.quantity}
+              onChange={(e) =>
+                setNewCrop({
+                  ...newCrop,
+                  quantity: e.target.value,
+                })
+              }
+            />
+
+
+            {/* Price */}
+
+            <input
+              type="text"
+              placeholder="Price e.g. ₦250,000"
+              value={newCrop.price}
+              onChange={(e) =>
+                setNewCrop({
+                  ...newCrop,
+                  price: e.target.value,
+                })
+              }
+            />
+
+
+            {/* Status */}
+
+            <select
+              value={newCrop.status}
+              onChange={(e) =>
+                setNewCrop({
+                  ...newCrop,
+                  status: e.target.value,
+                })
+              }
+            >
+              <option value="Active">
+                Active
+              </option>
+
+              <option value="Inactive">
+                Inactive
+              </option>
+            </select>
+
+          </div>
+
+
+          {/* FORM BUTTONS */}
+
+          <div className="form-buttons">
+
+            <button
+              className="add-btn"
+              onClick={handleAddCrop}
+            >
+              {editingIndex !== null
+                ? "Update Listing"
+                : "Save Listing"}
+            </button>
+
+
+            <button
+              className="cancel-btn"
+              onClick={() => {
+                setShowForm(false);
+                setEditingIndex(null);
+
+                setNewCrop({
+                  name: "",
+                  quantity: "",
+                  price: "",
+                  status: "Active",
+                });
+              }}
+            >
+              Cancel
+            </button>
+
+          </div>
+
         </div>
       )}
 
-      <div className="recent-activities">
-        <table className="crop-table">
-          <thead>
-            <tr>
-              <th>Crop Name</th>
-              <th>Farm</th>
-              <th>Planting Date</th>
-              <th>Harvest Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            {crops.map((crop, index) => (
-              <tr key={index}>
-                <td>{crop.name}</td>
-                <td>{crop.farm}</td>
-                <td>{crop.planting}</td>
-                <td>{crop.harvest}</td>
-                <td>{crop.status}</td>
+      {/* =========================
+          LISTINGS TABLE
+      ========================= */}
 
-                <td>
-                  <button
-                    className="edit-btn"
-                    onClick={() => handleEditCrop(index)}
-                  >
-                    Edit
-                  </button>
+      <div className="recent-activities listings-card">
 
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteCrop(index)}
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="section-header">
+
+          <h2>
+            Crop Listings
+          </h2>
+
+          <span className="listing-count">
+            {crops.length}{" "}
+
+            {crops.length === 1
+              ? "listing"
+              : "listings"}
+          </span>
+
+        </div>
+
+
+        <div className="table-wrapper">
+
+          <table className="crop-table">
+
+            <thead>
+
+              <tr>
+
+                <th>Crop</th>
+
+                <th>Quantity</th>
+
+                <th>Price</th>
+
+                <th>Status</th>
+
+                <th>Actions</th>
+
               </tr>
-            ))}
-          </tbody>
-        </table>
+
+            </thead>
+
+
+            <tbody>
+
+              {/* EMPTY STATE */}
+
+              {crops.length === 0 ? (
+
+                <tr>
+
+                  <td
+                    colSpan="5"
+                    className="empty-state"
+                  >
+                    <strong>
+                      No listings yet
+                    </strong>
+
+                    <br />
+
+                    Start adding your crops
+                    to make them available
+                    to buyers.
+                  </td>
+
+                </tr>
+
+              ) : (
+
+                /* CROP LISTINGS */
+
+                crops.map((crop, index) => (
+
+                  <tr key={index}>
+
+                    <td>
+                      <strong>
+                        {crop.name}
+                      </strong>
+                    </td>
+
+
+                    <td>
+                      {crop.quantity}
+                    </td>
+
+
+                    <td>
+                      {crop.price}
+                    </td>
+
+
+                    <td>
+
+                      <span
+                        className={
+                          crop.status === "Active"
+                            ? "status-active"
+                            : "status-inactive"
+                        }
+                      >
+                        {crop.status}
+                      </span>
+
+                    </td>
+
+
+                    <td>
+
+                      {/* EDIT */}
+
+                      <button
+                        className="edit-btn"
+                        onClick={() =>
+                          handleEditCrop(index)
+                        }
+                        title="Edit listing"
+                      >
+                        <FiEdit2 />
+                      </button>
+
+
+                      {/* DELETE */}
+
+                      <button
+                        className="delete-btn"
+                        onClick={() =>
+                          handleDeleteCrop(index)
+                        }
+                        title="Delete listing"
+                      >
+                        <FiTrash2 />
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
-    </main>
+
+    </div>
   );
 }
 

@@ -1,0 +1,856 @@
+/* ========================================
+   ADD LISTING PAGE
+======================================== */
+
+.add-listing-page {
+  min-height: 100vh;
+
+  padding: 70px 55px 80px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+/* ========================================
+   MAIN CONTAINER
+======================================== */
+
+.add-listing-container {
+  width: 100%;
+  max-width: 1220px;
+
+  margin: 0 auto;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+
+.add-listing-header {
+  margin-bottom: 45px;
+}
+
+.add-listing-header h1 {
+  margin: 0 0 8px;
+
+  color: #263142;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.add-listing-header p {
+  margin: 0;
+
+  color: #747e8d;
+
+  font-size: 18px;
+
+  line-height: 1.5;
+}
+
+/* ========================================
+   MAIN CONTENT
+======================================== */
+
+.add-listing-content {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) 405px;
+
+  gap: 28px;
+
+  align-items: start;
+}
+
+/* ========================================
+   LEFT FORM
+======================================== */
+
+.add-listing-form {
+  width: 100%;
+}
+
+/* ========================================
+   FORM ROW
+======================================== */
+
+.form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 28px;
+}
+
+/* ========================================
+   FORM GROUP
+======================================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 27px;
+}
+
+.form-group label {
+  margin-bottom: 10px;
+
+  color: #727c8c;
+
+  font-size: 17px;
+  font-weight: 400;
+}
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  min-height: 66px;
+
+  padding: 0 20px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #9299a3;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #263142;
+
+  font-family: inherit;
+
+  font-size: 18px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2f7f35;
+}
+
+/* ========================================
+   SELECT WRAPPER
+======================================== */
+
+.select-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.select-wrapper select {
+  appearance: none;
+
+  padding-right: 50px;
+
+  cursor: pointer;
+}
+
+.select-wrapper svg {
+  position: absolute;
+
+  top: 50%;
+  right: 20px;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+
+  color: #263142;
+}
+
+/* ========================================
+   QUANTITY
+======================================== */
+
+.quantity-wrapper {
+  display: grid;
+
+  grid-template-columns: 1fr 82px;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid #9299a3;
+
+  border-radius: 11px;
+}
+
+.quantity-wrapper input {
+  min-width: 0;
+
+  border: none;
+
+  border-radius: 0;
+}
+
+.quantity-wrapper select {
+  min-width: 0;
+
+  border: none;
+
+  border-left: 1px solid #9299a3;
+
+  border-radius: 0;
+
+  cursor: pointer;
+}
+
+.quantity-wrapper input:focus,
+.quantity-wrapper select:focus {
+  border-color: transparent;
+}
+
+/* ========================================
+   LOCATION / DATE INPUTS
+======================================== */
+
+.icon-input {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  min-height: 66px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #9299a3;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+}
+
+.icon-input > svg:first-child {
+  flex-shrink: 0;
+
+  margin-left: 20px;
+
+  color: #2f7f35;
+}
+
+.icon-input input {
+  min-width: 0;
+
+  flex: 1;
+
+  padding: 0 12px;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+}
+
+.icon-input > svg:last-child {
+  flex-shrink: 0;
+
+  margin-right: 18px;
+
+  color: #263142;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   DESCRIPTION
+======================================== */
+
+.description-group {
+  margin-bottom: 0;
+}
+
+.description-wrapper {
+  position: relative;
+}
+
+.description-wrapper textarea {
+  width: 100%;
+
+  height: 190px;
+
+  padding: 18px 20px 45px;
+
+  resize: none;
+
+  line-height: 1.5;
+}
+
+.character-count {
+  position: absolute;
+
+  right: 20px;
+  bottom: 18px;
+
+  color: #263142;
+
+  font-size: 15px;
+}
+
+/* ========================================
+   FORM BUTTONS
+======================================== */
+
+.form-actions {
+  width: 100%;
+
+  margin-top: 55px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 28px;
+}
+
+.cancel-button,
+.publish-button {
+  height: 66px;
+
+  border-radius: 11px;
+
+  font-family: inherit;
+
+  font-size: 20px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Cancel */
+
+.cancel-button {
+  border: 1px solid #2f7f35;
+
+  background: #ffffff;
+
+  color: #2f7f35;
+}
+
+.cancel-button:hover {
+  background: #f3faf3;
+
+  transform: translateY(-1px);
+}
+
+/* Publish */
+
+.publish-button {
+  border: 1px solid #2f7f35;
+
+  background: #2f7f35;
+
+  color: #ffffff;
+}
+
+.publish-button:hover {
+  background: #286d2d;
+
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   PHOTO PANEL
+======================================== */
+
+.photo-panel {
+  width: 384px;
+  height: 500px;
+
+  box-sizing: border-box;
+
+  padding: 44px 34px 28px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 32px;
+
+  background: #ffffff;
+
+  border: 1px solid #8f98a6;
+
+  border-radius: 10px;
+}
+
+/* ========================================
+   MAIN PHOTO
+======================================== */
+
+.main-photo {
+  position: relative;
+
+  width: 100%;
+
+  height: 325px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+}
+
+.main-photo img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+/* ========================================
+   REMOVE PHOTO
+======================================== */
+
+.remove-photo {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #263142;
+
+  cursor: pointer;
+}
+
+.remove-photo:hover {
+  background: #f4f4f4;
+}
+
+/* ========================================
+   EMPTY PHOTO
+======================================== */
+
+.empty-photo {
+  width: 100%;
+  height: 325px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px dashed #9299a3;
+
+  border-radius: 10px;
+
+  color: #747e8d;
+
+  font-size: 17px;
+}
+
+/* ========================================
+   ADD MORE PHOTOS
+======================================== */
+
+.add-more-photos {
+  width: 100%;
+
+  height: 155px;
+
+  margin-top: 40px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px dashed #9299a3;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #263142;
+
+  cursor: pointer;
+
+  text-align: center;
+}
+
+.add-more-photos svg {
+  margin-bottom: 12px;
+
+  color: #2f7f35;
+}
+
+.add-more-photos span {
+  color: #263142;
+
+  font-size: 18px;
+}
+
+.add-more-photos small {
+  margin-top: 8px;
+
+  color: #747e8d;
+
+  font-size: 15px;
+}
+
+.add-more-photos:hover {
+  background: #f9fcf9;
+}
+
+/* ========================================
+   LARGE SCREEN
+======================================== */
+
+@media (max-width: 1200px) {
+  .add-listing-page {
+    padding: 60px 35px 70px;
+  }
+
+  .add-listing-content {
+    grid-template-columns: minmax(0, 1fr) 360px;
+
+    gap: 25px;
+  }
+
+  .photo-panel {
+    width: 360px;
+
+    padding: 30px;
+  }
+
+  .main-photo,
+  .empty-photo {
+    height: 285px;
+  }
+}
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 950px) {
+  .add-listing-content {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-panel {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .form-row {
+    gap: 20px;
+  }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 600px) {
+  .add-listing-page {
+    width: 100%;
+
+    padding: 20px 31px 60px;
+
+    box-sizing: border-box;
+  }
+
+  /* ======================================
+     HEADER
+  ====================================== */
+
+  .add-listing-header {
+    margin-bottom: 42px;
+  }
+
+  .add-listing-header h1 {
+    width: 180px;
+    height: 22px;
+
+    margin: 0 0 12px;
+
+    color: #1f2937;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+
+    font-size: 18.15px;
+    font-weight: 600;
+    font-style: normal;
+
+    line-height: 100%;
+    letter-spacing: 0;
+  }
+
+  .add-listing-header p {
+    margin: 0;
+
+    color: #747e8d;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+  }
+
+  /* ======================================
+     MAIN CONTENT
+  ====================================== */
+
+  .add-listing-content {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0;
+  }
+
+  /* ======================================
+     FORM
+  ====================================== */
+
+  .add-listing-form {
+    width: 100%;
+  }
+
+  /* ======================================
+     FORM ROWS
+  ====================================== */
+
+  .form-row {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  /* ======================================
+     FORM GROUP
+  ====================================== */
+
+  .form-group {
+    width: 100%;
+
+    margin-bottom: 22px;
+  }
+
+  .form-group label {
+    margin-bottom: 8px;
+
+    font-size: 15px;
+  }
+
+  /* ======================================
+     INPUTS
+  ====================================== */
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+
+    min-height: 58px;
+
+    font-size: 16px;
+  }
+
+  /* ======================================
+     QUANTITY
+  ====================================== */
+
+  .quantity-wrapper {
+    width: 100%;
+
+    grid-template-columns: minmax(0, 1fr) 75px;
+  }
+
+  /* ======================================
+     LOCATION / DATE
+  ====================================== */
+
+  .icon-input {
+    width: 100%;
+
+    min-height: 58px;
+  }
+
+  .icon-input > svg:first-child {
+    margin-left: 16px;
+  }
+
+  .icon-input > svg:last-child {
+    margin-right: 14px;
+  }
+
+  /* ======================================
+     DESCRIPTION
+  ====================================== */
+
+  .description-group {
+    width: 100%;
+
+    margin-top: 2px;
+
+    margin-bottom: 0;
+  }
+
+  .description-wrapper {
+    width: 100%;
+  }
+
+  .description-wrapper textarea {
+    width: 100%;
+    height: 130.74px;
+
+    padding: 15px 16px 38px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+  }
+
+  .character-count {
+    right: 16px;
+    bottom: 14px;
+
+    font-size: 13px;
+  }
+
+  /* ======================================
+     BUTTONS
+  ====================================== */
+
+  .form-actions {
+    width: 100%;
+
+    margin-top: 23px;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .cancel-button,
+  .publish-button {
+    width: 100%;
+
+    height: 42px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+  }
+
+  /* ======================================
+     PHOTO PANEL
+  ====================================== */
+
+  .photo-panel {
+    width: 100%;
+    max-width: none;
+
+    height: auto;
+
+    margin-top: 35px;
+
+    padding: 20px;
+
+    gap: 20px;
+
+    border-radius: 10px;
+  }
+
+  .main-photo,
+  .empty-photo {
+    width: 100%;
+
+    height: 250px;
+  }
+
+  .add-more-photos {
+    width: 100%;
+
+    height: 130px;
+
+    margin-top: 0;
+  }
+
+  .add-more-photos span {
+    font-size: 16px;
+  }
+
+  .add-more-photos small {
+    font-size: 13px;
+  }
+}
+
+/* ========================================
+   VERY SMALL PHONES
+======================================== */
+
+@media (max-width: 400px) {
+  .add-listing-page {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .mobile-logo {
+    left: 78px;
+  }
+
+  .mobile-sidebar-button {
+    left: 20px;
+  }
+
+  .add-listing-header h1 {
+    font-size: 18px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .icon-input {
+    min-height: 54px;
+  }
+}

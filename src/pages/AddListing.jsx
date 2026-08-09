@@ -5,7 +5,7 @@ import { MapPin, CalendarDays, Plus, X, ChevronDown } from "lucide-react";
 
 import FarmerLayout from "../layouts/FarmerLayout";
 
-import "./AddListing.css";
+import "../styles/AddListing.css";
 
 /* =========================================================
    CROP IMAGES

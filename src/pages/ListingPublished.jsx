@@ -13,7 +13,7 @@ import {
 
 import FarmerLayout from "../layouts/FarmerLayout";
 
-import "./ListingPublished.css";
+import "../styles/ListingPublished.css";
 
 /* =========================================================
    CROP IMAGES

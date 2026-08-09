@@ -1,101 +1,97 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "../styles/Dashboard.css";
 
 function Layout() {
   return (
     <div className="dashboard">
 
-      {/* ===========================
+      {/* =========================
           SIDEBAR
-      =========================== */}
-
+      ========================= */}
       <aside className="sidebar">
 
         <h2 className="logo">Ubani</h2>
 
         <ul>
 
-          {/* Dashboard */}
           <li>
             <NavLink to="/" className="nav-link">
               🏠 Dashboard
             </NavLink>
           </li>
 
-          {/* My Listings */}
           <li>
-            <NavLink to="/crops" className="nav-link">
-              🌾 My Listings
+            <NavLink to="/listings" className="nav-link">
+              📋 My Listings
             </NavLink>
           </li>
 
-          {/* Buyer Requests */}
           <li>
-            <NavLink to="/buyer-requests" className="nav-link">
-              👥 Buyer Requests
+            <NavLink to="/requests" className="nav-link">
+              📨 Buyer Requests
             </NavLink>
           </li>
 
-          {/* Orders */}
           <li>
             <NavLink to="/orders" className="nav-link">
-              🛒 Orders
+              📦 Orders
             </NavLink>
           </li>
 
-          {/* Messages */}
           <li>
             <NavLink to="/messages" className="nav-link">
               💬 Messages
             </NavLink>
           </li>
 
-          {/* Payments */}
           <li>
             <NavLink to="/payments" className="nav-link">
               💳 Payments
             </NavLink>
           </li>
 
-          {/* Market Insights */}
           <li>
             <NavLink to="/market-insights" className="nav-link">
               📊 Market Insights
             </NavLink>
           </li>
 
-          <hr />
-
-          {/* Profile */}
           <li>
             <NavLink to="/profile" className="nav-link">
               👤 Profile
             </NavLink>
           </li>
 
-          {/* Settings */}
           <li>
             <NavLink to="/settings" className="nav-link">
               ⚙️ Settings
             </NavLink>
           </li>
 
-          {/* Log Out */}
           <li>
-            <NavLink to="/" className="nav-link">
-              🚪 Log Out
-            </NavLink>
-          </li>
+  <button
+    type="button"
+    className="nav-link logout-link"
+    onClick={() => {
+      localStorage.removeItem("farmerProfile");
+      window.location.href = "/";
+    }}
+  >
+    🚪 Logout
+  </button>
+</li>
 
         </ul>
 
       </aside>
 
-      {/* ===========================
-          PAGE CONTENT
-      =========================== */}
-
-      <Outlet />
+      {/* =========================
+          MAIN PAGE AREA
+      ========================= */}
+      <main className="main-content">
+        <Outlet />
+      </main>
 
     </div>
   );

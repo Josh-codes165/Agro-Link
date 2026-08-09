@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import "../styles/Dashboard.css";
 
 import {
@@ -12,29 +13,276 @@ function Dashboard() {
   const [showProfile, setShowProfile] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
-  const handleAddListing = () => {
-    alert("Add New Listing clicked!");
+  // =========================
+  // GET SAVED PROFILE
+  // =========================
+
+  const getSavedProfile = () => {
+    try {
+      const saved = localStorage.getItem("farmerProfile");
+
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
+
+    return {
+      name: "",
+      farm: "",
+      location: "",
+      role: "Farmer",
+    };
   };
 
-  const handleViewAll = () => {
-    alert("Showing all listings...");
-  };
+  const savedProfile = getSavedProfile();
+
+  // =========================
+  // PROFILE DATA
+  // =========================
+
+  const [profileData, setProfileData] = useState(savedProfile);
+
+  useEffect(() => {
+    const updateProfile = () => {
+      try {
+        const saved = localStorage.getItem("farmerProfile");
+
+        if (saved) {
+          setProfileData(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    };
+
+    updateProfile();
+
+    window.addEventListener("storage", updateProfile);
+
+    return () => {
+      window.removeEventListener("storage", updateProfile);
+    };
+  }, []);
+
+  const currentName =
+    profileData?.name?.trim() || "Farmer";
+
+  const currentRole =
+    profileData?.role?.trim() || "Farmer";
+
+  const currentAccountText =
+    `${currentRole} Account`;
+
+  // =========================
+  // GET THIS FARMER'S LISTINGS
+  // =========================
+
+  const storageKey = `crops_${currentName}`;
+
+  const [crops, setCrops] = useState(() => {
+    const savedCrops = localStorage.getItem(storageKey);
+
+    if (!savedCrops) {
+      return [];
+    }
+
+    try {
+      const parsedCrops = JSON.parse(savedCrops);
+
+      return Array.isArray(parsedCrops)
+        ? parsedCrops
+        : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // =========================
+  // UPDATE LISTINGS
+  // =========================
+
+  useEffect(() => {
+    const updateCrops = () => {
+      const savedCrops =
+        localStorage.getItem(storageKey);
+
+      if (!savedCrops) {
+        setCrops([]);
+        return;
+      }
+
+      try {
+        const parsedCrops =
+          JSON.parse(savedCrops);
+
+        setCrops(
+          Array.isArray(parsedCrops)
+            ? parsedCrops
+            : []
+        );
+      } catch {
+        setCrops([]);
+      }
+    };
+
+    updateCrops();
+
+    window.addEventListener(
+      "storage",
+      updateCrops
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        updateCrops
+      );
+    };
+  }, [storageKey]);
+
+  // =========================
+  // DASHBOARD STATISTICS
+  // =========================
+
+  const totalListings = crops.length;
+
+  const totalViews = crops.reduce(
+    (total, crop) => {
+      const views = Number(crop.views);
+
+      return (
+        total +
+        (Number.isFinite(views) ? views : 0)
+      );
+    },
+    0
+  );
+
+  const totalRequests = crops.reduce(
+    (total, crop) => {
+      const requests = Number(crop.requests);
+
+      return (
+        total +
+        (Number.isFinite(requests)
+          ? requests
+          : 0)
+      );
+    },
+    0
+  );
+
+  // =========================
+  // ORDERS
+  // =========================
+
+  const ordersKey = `orders_${currentName}`;
+
+  const [orders, setOrders] = useState(0);
+
+  useEffect(() => {
+    const updateOrders = () => {
+      const savedOrders =
+        localStorage.getItem(ordersKey);
+
+      if (!savedOrders) {
+        setOrders(0);
+        return;
+      }
+
+      try {
+        const parsedOrders =
+          JSON.parse(savedOrders);
+
+        if (Array.isArray(parsedOrders)) {
+          setOrders(parsedOrders.length);
+          return;
+        }
+
+        if (
+          parsedOrders &&
+          typeof parsedOrders === "object"
+        ) {
+          if (
+            Array.isArray(
+              parsedOrders.orders
+            )
+          ) {
+            setOrders(
+              parsedOrders.orders.length
+            );
+            return;
+          }
+
+          const count = Number(
+            parsedOrders.count
+          );
+
+          setOrders(
+            Number.isFinite(count)
+              ? count
+              : 0
+          );
+
+          return;
+        }
+
+        const numberValue =
+          Number(parsedOrders);
+
+        setOrders(
+          Number.isFinite(numberValue)
+            ? numberValue
+            : 0
+        );
+      } catch {
+        const numberValue =
+          Number(savedOrders);
+
+        setOrders(
+          Number.isFinite(numberValue)
+            ? numberValue
+            : 0
+        );
+      }
+    };
+
+    updateOrders();
+
+    window.addEventListener(
+      "storage",
+      updateOrders
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        updateOrders
+      );
+    };
+  }, [ordersKey]);
+
+  // =========================
+  // DASHBOARD
+  // =========================
 
   return (
     <main className="main-content">
 
-      {/* =========================
-          TOP BAR
-      ========================= */}
+      {/* TOP BAR */}
+
       <div className="topbar">
 
-        <div>
+        <div className="topbar-left">
           <h4>Dashboard</h4>
         </div>
 
         <div className="topbar-right">
 
           {/* Search */}
+
           {showSearch && (
             <input
               type="text"
@@ -46,122 +294,176 @@ function Dashboard() {
 
           <FiSearch
             className="top-icon"
-            onClick={() => setShowSearch(!showSearch)}
+            onClick={() =>
+              setShowSearch(!showSearch)
+            }
           />
 
           {/* Notification */}
+
           <FiBell className="top-icon" />
 
           {/* Profile */}
+
           <div
             className="profile"
-            onClick={() => setShowProfile(!showProfile)}
+            onClick={() =>
+              setShowProfile(!showProfile)
+            }
           >
+
             <div className="avatar">
               <FiUser />
             </div>
 
-            <span>Chinedu</span>
+            <span>{currentName}</span>
 
             <FiChevronDown />
+
           </div>
+
+          {/* PROFILE DROPDOWN */}
 
           {showProfile && (
             <div className="profile-menu">
-              <p>My Profile</p>
-              <p>Settings</p>
-              <p>Log Out</p>
+
+              <div className="profile-menu-header">
+
+                <div className="profile-menu-avatar">
+                  <FiUser />
+                </div>
+
+                <div>
+                  <strong>
+                    {currentName}
+                  </strong>
+
+                  <span>
+                    {currentAccountText}
+                  </span>
+                </div>
+
+              </div>
+
+              <div className="profile-menu-divider"></div>
+
+              <NavLink
+                to="/profile"
+                onClick={() =>
+                  setShowProfile(false)
+                }
+              >
+                My Profile
+              </NavLink>
+
+              <NavLink
+                to="/settings"
+                onClick={() =>
+                  setShowProfile(false)
+                }
+              >
+                Settings
+              </NavLink>
+
             </div>
           )}
 
         </div>
+
       </div>
 
+      {/* WELCOME SECTION */}
 
-      {/* =========================
-          WELCOME SECTION
-      ========================= */}
       <section className="welcome-section">
-        <h1>Welcome back, Chinedu 👋</h1>
+
+        <h1>
+          Welcome back, {currentName} 👋
+        </h1>
 
         <p>
-          Here's what's happening on your farm today.
+          Here's what's happening on your
+          farm today.
         </p>
+
       </section>
 
+      {/* SUMMARY CARDS */}
 
-      {/* =========================
-          SUMMARY CARDS
-      ========================= */}
       <section className="cards">
 
-        {/* Card 1 */}
         <div className="card">
           <h3>Total Listings</h3>
 
-          <h2>25</h2>
+          <h2>
+            {totalListings}
+          </h2>
 
-          <p>Active Listings</p>
+          <p>
+            Active Listings
+          </p>
         </div>
 
-
-        {/* Card 2 */}
         <div className="card">
           <h3>Total Views</h3>
 
-          <h2>259</h2>
+          <h2>
+            {totalViews}
+          </h2>
 
-          <p>+50% this week</p>
+          <p>
+            Total Listing Views
+          </p>
         </div>
 
-
-        {/* Card 3 */}
         <div className="card">
           <h3>Requests</h3>
 
-          <h2>9</h2>
+          <h2>
+            {totalRequests}
+          </h2>
 
-          <p>Buyer Requests</p>
+          <p>
+            Buyer Requests
+          </p>
         </div>
 
-
-        {/* Card 4 */}
         <div className="card">
           <h3>Orders</h3>
 
-          <h2>5</h2>
+          <h2>
+            {orders}
+          </h2>
 
-          <p>Ongoing Orders</p>
+          <p>
+            Ongoing Orders
+          </p>
         </div>
 
       </section>
 
+      {/* BOTTOM DASHBOARD */}
 
-      {/* =========================
-          BOTTOM DASHBOARD
-      ========================= */}
       <section className="dashboard-bottom">
 
-        {/* =========================
-            TOTAL LISTINGS
-        ========================= */}
+        {/* TOTAL LISTINGS */}
+
         <div className="recent-activities">
 
           <div className="section-header">
 
-            <h2>Total Listings</h2>
+            <h2>
+              Total Listings
+            </h2>
 
-            <button
+            <NavLink
+              to="/listings"
               className="view-all"
-              onClick={handleViewAll}
             >
               View all
-            </button>
+            </NavLink>
 
           </div>
 
-
-          {/* Listings Table */}
           <table className="crop-table">
 
             <thead>
@@ -174,102 +476,92 @@ function Dashboard() {
               </tr>
             </thead>
 
-
             <tbody>
 
-              {/* Tomatoes */}
-              <tr>
-                <td>Tomatoes</td>
-                <td>700kg</td>
-                <td>$1000</td>
+              {crops.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="5"
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    No listings added yet.
+                  </td>
+                </tr>
+              ) : (
+                crops
+                  .slice(0, 4)
+                  .map((crop, index) => (
+                    <tr
+                      key={
+                        crop.id || index
+                      }
+                    >
 
-                <td>
-                  <span className="status-active">
-                    Active
-                  </span>
-                </td>
+                      <td>
+                        {crop.name}
+                      </td>
 
-                <td>15</td>
-              </tr>
+                      <td>
+                        {crop.quantity}
+                      </td>
 
+                      <td>
+                        {crop.price}
+                      </td>
 
-              {/* Cucumbers */}
-              <tr>
-                <td>Cucumbers</td>
-                <td>200kg</td>
-                <td>$500</td>
+                      <td>
+                        <span
+                          className={
+                            crop.status ===
+                            "Active"
+                              ? "status-active"
+                              : "status-inactive"
+                          }
+                        >
+                          {crop.status}
+                        </span>
+                      </td>
 
-                <td>
-                  <span className="status-active">
-                    Active
-                  </span>
-                </td>
+                      <td>
+                        {crop.views || 0}
+                      </td>
 
-                <td>65</td>
-              </tr>
-
-
-              {/* Maize */}
-              <tr>
-                <td>Maize</td>
-                <td>500kg</td>
-                <td>$2500</td>
-
-                <td>
-                  <span className="status-inactive">
-                    Inactive
-                  </span>
-                </td>
-
-                <td>70</td>
-              </tr>
-
-
-              {/* Cassava */}
-              <tr>
-                <td>Cassava</td>
-                <td>250kg</td>
-                <td>$7600</td>
-
-                <td>
-                  <span className="status-inactive">
-                    Inactive
-                  </span>
-                </td>
-
-                <td>25</td>
-              </tr>
+                    </tr>
+                  ))
+              )}
 
             </tbody>
 
           </table>
 
-
-          {/* Add Listing Button */}
-          <button
+          <NavLink
+            to="/listings"
             className="add-btn"
-            onClick={handleAddListing}
           >
             Add New Listing
-          </button>
+          </NavLink>
 
         </div>
 
+        {/* MARKET PRICE UPDATES */}
 
-        {/* =========================
-            MARKET PRICE UPDATES
-        ========================= */}
         <div className="market-card">
 
-          <h2>Market Price Updates</h2>
+          <h2>
+            Market Price Updates
+          </h2>
 
-
-          {/* Tomatoes */}
           <div className="market-item">
 
-            <h4>Tomatoes</h4>
+            <h4>
+              Tomatoes
+            </h4>
 
-            <p>$150–800/kg</p>
+            <p>
+              ₦150–800/kg
+            </p>
 
             <span className="up">
               +12%
@@ -277,13 +569,15 @@ function Dashboard() {
 
           </div>
 
-
-          {/* Maize */}
           <div className="market-item">
 
-            <h4>Maize</h4>
+            <h4>
+              Maize
+            </h4>
 
-            <p>$350–500/kg</p>
+            <p>
+              ₦350–500/kg
+            </p>
 
             <span className="down">
               -17%
@@ -291,13 +585,15 @@ function Dashboard() {
 
           </div>
 
-
-          {/* Cucumbers */}
           <div className="market-item">
 
-            <h4>Cucumbers</h4>
+            <h4>
+              Cucumbers
+            </h4>
 
-            <p>$250–450/kg</p>
+            <p>
+              ₦250–450/kg
+            </p>
 
             <span className="down">
               -7%

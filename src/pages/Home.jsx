@@ -29,8 +29,12 @@ export default function Home() {
             <li><a href="/resources">Resources</a></li>
           </ul>
           <div className="btnDiv">
-            <button className="btn-login">Log in</button>
-            <button className="btn-signup">Sign up</button>
+            <button className="btn-login">
+              <a href="/login">Log In</a>
+            </button>
+            <button className="btn-signup">
+              <a href="/signup">Sign Up</a>
+            </button>
           </div>
         </nav>
 

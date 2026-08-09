@@ -19,7 +19,11 @@ function BuyerRequests() {
     }
 
     try {
-      return JSON.parse(savedRequests);
+      const parsedRequests = JSON.parse(savedRequests);
+
+      return Array.isArray(parsedRequests)
+        ? parsedRequests
+        : defaultRequests;
     } catch {
       return defaultRequests;
     }
@@ -79,7 +83,9 @@ function BuyerRequests() {
   return (
     <div className="buyer-requests-page">
 
-      {/* PAGE HEADER */}
+      {/* =========================
+          PAGE HEADER
+      ========================= */}
 
       <div className="page-header">
         <div>
@@ -92,7 +98,9 @@ function BuyerRequests() {
       </div>
 
 
-      {/* SUMMARY CARDS */}
+      {/* =========================
+          SUMMARY CARDS
+      ========================= */}
 
       <div className="cards">
 
@@ -134,7 +142,9 @@ function BuyerRequests() {
       </div>
 
 
-      {/* REQUESTS TABLE */}
+      {/* =========================
+          REQUESTS TABLE
+      ========================= */}
 
       <div className="recent-activities buyer-requests-card">
 
@@ -158,7 +168,9 @@ function BuyerRequests() {
         </div>
 
 
-        {/* TABLE */}
+        {/* =========================
+            TABLE
+        ========================= */}
 
         <div className="table-wrapper">
 
@@ -202,13 +214,13 @@ function BuyerRequests() {
 
                 requests.map((request, index) => (
 
-                  <tr key={index}>
+                  <tr key={request.id || index}>
 
                     {/* BUYER */}
 
                     <td>
                       <strong>
-                        {request.buyer}
+                        {request.buyer || "Unknown Buyer"}
                       </strong>
                     </td>
 
@@ -216,28 +228,28 @@ function BuyerRequests() {
                     {/* CROP */}
 
                     <td>
-                      {request.crop}
+                      {request.crop || "-"}
                     </td>
 
 
                     {/* QUANTITY */}
 
                     <td>
-                      {request.quantity}
+                      {request.quantity || "-"}
                     </td>
 
 
                     {/* PRICE */}
 
                     <td>
-                      {request.price}
+                      {request.price || "-"}
                     </td>
 
 
                     {/* DATE */}
 
                     <td>
-                      {request.date}
+                      {request.date || "-"}
                     </td>
 
 
@@ -275,6 +287,7 @@ function BuyerRequests() {
                         <div className="request-actions">
 
                           <button
+                            type="button"
                             className="accept-btn"
                             onClick={() =>
                               handleAccept(index)
@@ -285,6 +298,7 @@ function BuyerRequests() {
 
 
                           <button
+                            type="button"
                             className="delete-btn"
                             onClick={() =>
                               handleDecline(index)

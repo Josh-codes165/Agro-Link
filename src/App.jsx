@@ -16,6 +16,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Main Dashboard Layout */}
         <Route path="/" element={<Layout />}>
 
           {/* Dashboard */}
@@ -26,7 +28,7 @@ function App() {
 
           {/* Buyer Requests */}
           <Route
-            path="buyer-requests"
+            path="requests"
             element={<BuyerRequests />}
           />
 
@@ -52,6 +54,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
 
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

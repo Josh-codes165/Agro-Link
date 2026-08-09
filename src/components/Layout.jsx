@@ -1,100 +1,97 @@
-import { NavLink, Outlet } from "react-router-dom";
-import {
-  FiHome,
-  FiGrid,
-  FiUsers,
-  FiShoppingCart,
-  FiMessageCircle,
-  FiCreditCard,
-  FiBarChart2,
-  FiUser,
-  FiSettings,
-} from "react-icons/fi";
-
+import { NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "../styles/Dashboard.css";
 
 function Layout() {
   return (
     <div className="dashboard">
 
-      {/* Sidebar */}
+      {/* =========================
+          SIDEBAR
+      ========================= */}
       <aside className="sidebar">
 
-        <h2 className="logo">UBANI</h2>
+        <h2 className="logo">Ubani</h2>
 
         <ul>
 
           <li>
             <NavLink to="/" className="nav-link">
-              <FiHome />
-              <span>Dashboard</span>
+              🏠 Dashboard
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/listings" className="nav-link">
-              <FiGrid />
-              <span>My Listings</span>
+              📋 My Listings
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="/buyer-requests" className="nav-link">
-              <FiUsers />
-              <span>Buyer Requests</span>
+            <NavLink to="/requests" className="nav-link">
+              📨 Buyer Requests
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/orders" className="nav-link">
-              <FiShoppingCart />
-              <span>Orders</span>
+              📦 Orders
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/messages" className="nav-link">
-              <FiMessageCircle />
-              <span>Messages</span>
+              💬 Messages
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/payments" className="nav-link">
-              <FiCreditCard />
-              <span>Payments</span>
+              💳 Payments
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/market-insights" className="nav-link">
-              <FiBarChart2 />
-              <span>Market Insights</span>
+              📊 Market Insights
             </NavLink>
           </li>
 
-          <hr />
-
           <li>
             <NavLink to="/profile" className="nav-link">
-              <FiUser />
-              <span>Profile</span>
+              👤 Profile
             </NavLink>
           </li>
 
           <li>
             <NavLink to="/settings" className="nav-link">
-              <FiSettings />
-              <span>Settings</span>
+              ⚙️ Settings
             </NavLink>
           </li>
+
+          <li>
+  <button
+    type="button"
+    className="nav-link logout-link"
+    onClick={() => {
+      localStorage.removeItem("farmerProfile");
+      window.location.href = "/";
+    }}
+  >
+    🚪 Logout
+  </button>
+</li>
 
         </ul>
 
       </aside>
 
-      {/* Page Content */}
-      <Outlet />
+      {/* =========================
+          MAIN PAGE AREA
+      ========================= */}
+      <main className="main-content">
+        <Outlet />
+      </main>
 
     </div>
   );

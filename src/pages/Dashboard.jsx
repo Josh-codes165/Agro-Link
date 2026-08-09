@@ -38,22 +38,48 @@ function Dashboard() {
 
   const savedProfile = getSavedProfile();
 
-  const farmerName = savedProfile?.name?.trim() || "Farmer";
-
-  const farmerRole =
-    savedProfile?.role?.trim() || "Farmer";
-
   // =========================
-  // ROLE ACCOUNT TEXT
+  // PROFILE DATA
   // =========================
 
-  const accountText = `${farmerRole} Account`;
+  const [profileData, setProfileData] = useState(savedProfile);
+
+  useEffect(() => {
+    const updateProfile = () => {
+      try {
+        const saved = localStorage.getItem("farmerProfile");
+
+        if (saved) {
+          setProfileData(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    };
+
+    updateProfile();
+
+    window.addEventListener("storage", updateProfile);
+
+    return () => {
+      window.removeEventListener("storage", updateProfile);
+    };
+  }, []);
+
+  const currentName =
+    profileData?.name?.trim() || "Farmer";
+
+  const currentRole =
+    profileData?.role?.trim() || "Farmer";
+
+  const currentAccountText =
+    `${currentRole} Account`;
 
   // =========================
   // GET THIS FARMER'S LISTINGS
   // =========================
 
-  const storageKey = `crops_${farmerName}`;
+  const storageKey = `crops_${currentName}`;
 
   const [crops, setCrops] = useState(() => {
     const savedCrops = localStorage.getItem(storageKey);
@@ -88,7 +114,8 @@ function Dashboard() {
       }
 
       try {
-        const parsedCrops = JSON.parse(savedCrops);
+        const parsedCrops =
+          JSON.parse(savedCrops);
 
         setCrops(
           Array.isArray(parsedCrops)
@@ -151,7 +178,7 @@ function Dashboard() {
   // ORDERS
   // =========================
 
-  const ordersKey = `orders_${farmerName}`;
+  const ordersKey = `orders_${currentName}`;
 
   const [orders, setOrders] = useState(0);
 
@@ -238,61 +265,13 @@ function Dashboard() {
   }, [ordersKey]);
 
   // =========================
-  // REFRESH PROFILE DATA
+  // DASHBOARD
   // =========================
-
-  const [profileData, setProfileData] =
-    useState(savedProfile);
-
-  useEffect(() => {
-    const updateProfile = () => {
-      try {
-        const saved =
-          localStorage.getItem(
-            "farmerProfile"
-          );
-
-        if (saved) {
-          setProfileData(
-            JSON.parse(saved)
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Error updating profile:",
-          error
-        );
-      }
-    };
-
-    window.addEventListener(
-      "storage",
-      updateProfile
-    );
-
-    return () => {
-      window.removeEventListener(
-        "storage",
-        updateProfile
-      );
-    };
-  }, []);
-
-  const currentName =
-    profileData?.name?.trim() || "Farmer";
-
-  const currentRole =
-    profileData?.role?.trim() || "Farmer";
-
-  const currentAccountText =
-    `${currentRole} Account`;
 
   return (
     <main className="main-content">
 
-      {/* =========================
-          TOP BAR
-      ========================= */}
+      {/* TOP BAR */}
 
       <div className="topbar">
 
@@ -303,6 +282,7 @@ function Dashboard() {
         <div className="topbar-right">
 
           {/* Search */}
+
           {showSearch && (
             <input
               type="text"
@@ -320,9 +300,11 @@ function Dashboard() {
           />
 
           {/* Notification */}
+
           <FiBell className="top-icon" />
 
           {/* Profile */}
+
           <div
             className="profile"
             onClick={() =>
@@ -340,9 +322,7 @@ function Dashboard() {
 
           </div>
 
-          {/* =========================
-              PROFILE DROPDOWN
-          ========================= */}
+          {/* PROFILE DROPDOWN */}
 
           {showProfile && (
             <div className="profile-menu">
@@ -389,11 +369,10 @@ function Dashboard() {
           )}
 
         </div>
+
       </div>
 
-      {/* =========================
-          WELCOME SECTION
-      ========================= */}
+      {/* WELCOME SECTION */}
 
       <section className="welcome-section">
 
@@ -408,41 +387,61 @@ function Dashboard() {
 
       </section>
 
-      {/* =========================
-          SUMMARY CARDS
-      ========================= */}
+      {/* SUMMARY CARDS */}
 
       <section className="cards">
 
         <div className="card">
           <h3>Total Listings</h3>
-          <h2>{totalListings}</h2>
-          <p>Active Listings</p>
+
+          <h2>
+            {totalListings}
+          </h2>
+
+          <p>
+            Active Listings
+          </p>
         </div>
 
         <div className="card">
           <h3>Total Views</h3>
-          <h2>{totalViews}</h2>
-          <p>Total Listing Views</p>
+
+          <h2>
+            {totalViews}
+          </h2>
+
+          <p>
+            Total Listing Views
+          </p>
         </div>
 
         <div className="card">
           <h3>Requests</h3>
-          <h2>{totalRequests}</h2>
-          <p>Buyer Requests</p>
+
+          <h2>
+            {totalRequests}
+          </h2>
+
+          <p>
+            Buyer Requests
+          </p>
         </div>
 
         <div className="card">
           <h3>Orders</h3>
-          <h2>{orders}</h2>
-          <p>Ongoing Orders</p>
+
+          <h2>
+            {orders}
+          </h2>
+
+          <p>
+            Ongoing Orders
+          </p>
         </div>
 
       </section>
 
-      {/* =========================
-          BOTTOM DASHBOARD
-      ========================= */}
+      {/* BOTTOM DASHBOARD */}
 
       <section className="dashboard-bottom">
 
@@ -452,7 +451,9 @@ function Dashboard() {
 
           <div className="section-header">
 
-            <h2>Total Listings</h2>
+            <h2>
+              Total Listings
+            </h2>
 
             <NavLink
               to="/listings"
@@ -553,27 +554,51 @@ function Dashboard() {
           </h2>
 
           <div className="market-item">
-            <h4>Tomatoes</h4>
-            <p>₦150–800/kg</p>
+
+            <h4>
+              Tomatoes
+            </h4>
+
+            <p>
+              ₦150–800/kg
+            </p>
+
             <span className="up">
               +12%
             </span>
+
           </div>
 
           <div className="market-item">
-            <h4>Maize</h4>
-            <p>₦350–500/kg</p>
+
+            <h4>
+              Maize
+            </h4>
+
+            <p>
+              ₦350–500/kg
+            </p>
+
             <span className="down">
               -17%
             </span>
+
           </div>
 
           <div className="market-item">
-            <h4>Cucumbers</h4>
-            <p>₦250–450/kg</p>
+
+            <h4>
+              Cucumbers
+            </h4>
+
+            <p>
+              ₦250–450/kg
+            </p>
+
             <span className="down">
               -7%
             </span>
+
           </div>
 
         </div>

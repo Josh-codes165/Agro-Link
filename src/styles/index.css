@@ -119,21 +119,22 @@ html {
 .sidebar {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 3rem;
- 
+  width: 100%;
+  padding: var(--space-5) 0;
   position: sticky;
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: var(--color-white); /* was --color-hite (typo) */
-  padding: 1rem;
+  background-color: var(--color-white); 
   box-shadow: var(--shadow-default);
   max-height: 100vh;
   height: 100vh;
 }
  
 .logo {
+  width: 100%;
+  padding-left: var(--space-6);
   font-size: var(--fs-h2);
   font-weight: var(--fw-semibold);
   color: var(--color-primary);
@@ -141,23 +142,43 @@ html {
  
 .sidebar-nav {
   display: flex;
+  width: 100%;
+  text-align: center;
   flex-direction: column;
-  gap: 4rem;
-  margin-left: 2rem;
+  gap: 3rem;
 }
  
 .nav-group {
   display: flex;
+  align-items: center;
+  width: 100%;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
+
  
-.nav-group li {
-  display: flex;
-  gap: 1rem;
+.nav-group li, .nav-items2 li {
   list-style: none;
-  
+  width: 100%;
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center; 
 }
+
+
+.nav-item {
+  display: grid;
+  grid-template-columns: 24px 1fr; 
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-h4);
+  color: var(--color-text);
+  text-decoration: none;
+  width: 160px; 
+  text-align: left;
+}
+
+
 .nav-group li svg,
 .nav-items2 li svg {
   color: var(--color-text);
@@ -167,18 +188,16 @@ html {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  border-top: var(--border-width) solid var(--color-border-strong);
 }
  
-.nav-items2 li {
-  display: flex;
-  gap: 1rem;
-  list-style: none;
-}
  
 .nav-group-2 {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  border-top: var(--border-width) solid var(--color-border-strong);
+  padding-top: var(--space-5);
 }
  
 .nav-item {
@@ -188,6 +207,7 @@ html {
   font-size: var(--fs-h4);
   color: var(--color-text);
   text-decoration: none;
+  
 }
  
 .main {
@@ -195,5 +215,5 @@ html {
   background-color: var(--color-bg);
   min-height: 100vh;
   margin-top: 5rem;
-  margin-right: 2rem;
+
 }

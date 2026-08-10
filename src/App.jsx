@@ -29,7 +29,7 @@ function App() {
       <Routes>
         {/* Public pages */}
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
 
         {/* Dashboard */}

@@ -1,263 +1,513 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '../components/DashboardLayout';
-import { useListings } from './ListingsContext';
-import * as nigerianStates from 'nigerian-states-and-lgas';
-import '../styles/addListing.css';
-import { Upload } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const STATES = nigerianStates.all().map((s) => s.state);
+import { MapPin, CalendarDays, Plus, X, ChevronDown } from "lucide-react";
 
-const initialFormState = {
-  cropType: 'Rice',
-  pricePerKg: '',
-  state: '',
-  city: '',
-  quantity: '',
-  totalPrice: '',
-  availableFrom: '',
-  description: '',
-  imagePreview: '',
+import FarmerLayout from "../layouts/FarmerLayout";
+
+import "../styles/AddListing.css";
+
+/* =========================================================
+   CROP IMAGES
+========================================================= */
+
+const cropImages = {
+  Tomatoes: "/images/Tomatoes.jpg",
+  Cabbage: "/images/Cabbage.jpg",
+  Cassava: "/images/Cassava.jpg",
+  Maize: "/images/Maize.jpg",
+  Potato: "/images/Potato.jpg",
 };
 
-export default function AddListing() {
+/* =========================================================
+   TODAY'S DATE
+========================================================= */
+
+const today = new Date().toISOString().split("T")[0];
+
+/* =========================================================
+   ADD LISTING
+========================================================= */
+
+function AddListing() {
   const navigate = useNavigate();
-  const { addListing } = useListings();
-  const [formData, setFormData] = useState(initialFormState);
-  const fileInputRef = useRef(null);
 
-  const [lgasList, setLgasList] = useState([]);
+  /* =======================================================
+     FORM STATE
+  ======================================================= */
 
-  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    produceName: "Tomatoes",
+    quantity: "100",
+    unit: "kg",
+    pricePerKg: "200",
+    price: "20000",
+    location: "Enugu, Enugu State",
+    availableFrom: today,
+    description: "Fresh tomatoes of good quality.",
+    image: cropImages.Tomatoes,
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const [imagePreview, setImagePreview] = useState(cropImages.Tomatoes);
 
-  const handleStateChange = (e) => {
-    const selectedState = e.target.value;
-    setFormData((prev) => ({ ...prev, state: selectedState, city: '' }));
+  /* =======================================================
+     HANDLE NORMAL INPUTS
+  ======================================================= */
 
-    const foundState = nigerianStates
-      .all()
-      .find((s) => s.state === selectedState);
-    setLgasList(foundState ? foundState.lgas : []);
-  };
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    setFormData((previousData) => {
+      const updatedData = {
+        ...previousData,
+        [name]: value,
+      };
+
+      /* Change image automatically when crop changes */
+      if (name === "produceName") {
+        updatedData.image = cropImages[value];
+
+        setImagePreview(cropImages[value]);
+      }
+
+      return updatedData;
+    });
+  }
+
+  /* =======================================================
+     HANDLE QUANTITY
+  ======================================================= */
+
+  function handleQuantityChange(event) {
+    const quantity = event.target.value;
+
+    setFormData((previousData) => {
+      const pricePerKg = Number(previousData.pricePerKg) || 0;
+
+      const totalPrice = Number(quantity) * pricePerKg;
+
+      return {
+        ...previousData,
+        quantity,
+        price: totalPrice.toString(),
+      };
+    });
+  }
+
+  /* =======================================================
+     HANDLE PRICE PER KG
+  ======================================================= */
+
+  function handlePricePerKgChange(event) {
+    const pricePerKg = event.target.value;
+
+    setFormData((previousData) => {
+      const quantity = Number(previousData.quantity) || 0;
+
+      const totalPrice = Number(pricePerKg) * quantity;
+
+      return {
+        ...previousData,
+        pricePerKg,
+        price: totalPrice.toString(),
+      };
+    });
+  }
+
+  /* =======================================================
+     HANDLE IMAGE UPLOAD
+  ======================================================= */
+
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+
     if (!file) return;
-    const previewUrl = URL.createObjectURL(file);
-    setFormData((prev) => ({ ...prev, imagePreview: previewUrl }));
-  };
 
-  const validateForm = () => {
-    if (!formData.cropType) return 'Please select a crop type.';
-    if (!formData.pricePerKg.trim()) return 'Price per kg is required.';
-    if (!formData.state) return 'Please select a state.';
-    if (!formData.city) return 'Please select a city.';
-    if (!formData.quantity.trim()) return 'Quantity is required.';
-    if (!formData.totalPrice.trim()) return 'Total price is required.';
-    if (!formData.availableFrom) return 'Please select an availability date.';
-    if (!formData.description.trim()) return 'Description is required.';
-    if (!formData.imagePreview) return 'Please upload a photo of your produce.';
-    return null;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
+    /* Maximum file size: 5MB */
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Please select an image smaller than 5MB.");
       return;
     }
 
-    addListing(formData);
-    navigate('/listings');
-  };
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setImagePreview(reader.result);
+
+      setFormData((previousData) => ({
+        ...previousData,
+        image: reader.result,
+      }));
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  /* =======================================================
+     REMOVE IMAGE
+  ======================================================= */
+
+  function removeImage() {
+    setImagePreview("");
+
+    setFormData((previousData) => ({
+      ...previousData,
+      image: "",
+    }));
+  }
+
+  /* =======================================================
+     HANDLE SUBMIT
+  ======================================================= */
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const quantity = Number(formData.quantity);
+    const pricePerKg = Number(formData.pricePerKg);
+
+    /* Quantity validation */
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      alert("Quantity must be greater than 0.");
+      return;
+    }
+
+    /* Make sure quantity is a whole number */
+    if (!Number.isInteger(quantity)) {
+      alert("Quantity must be a whole number.");
+      return;
+    }
+
+    /* Price validation */
+    if (!Number.isFinite(pricePerKg) || pricePerKg < 0) {
+      alert("Price per kg cannot be negative.");
+      return;
+    }
+
+    /* Location validation */
+    if (formData.location.trim().length < 3) {
+      alert("Please enter a valid location.");
+      return;
+    }
+
+    /* Date validation */
+    if (!formData.availableFrom) {
+      alert("Please select an available date.");
+      return;
+    }
+
+    /* Prevent past dates */
+    if (formData.availableFrom < today) {
+      alert("Available date cannot be in the past.");
+      return;
+    }
+
+    /* Description validation */
+    if (formData.description.trim().length < 10) {
+      alert("Description must contain at least 10 characters.");
+      return;
+    }
+
+    /* Create listing object */
+    const listingToSave = {
+      ...formData,
+
+      quantity: quantity.toString(),
+
+      pricePerKg: pricePerKg.toString(),
+
+      price: (quantity * pricePerKg).toString(),
+
+      listedOn: formData.availableFrom,
+
+      image: formData.image || cropImages[formData.produceName],
+    };
+
+    /* Save listing */
+    localStorage.setItem("ubaniListing", JSON.stringify(listingToSave));
+
+    /* Navigate to success page */
+    navigate("/listing-published");
+  }
+
+  /* =======================================================
+     CHARACTER COUNT
+  ======================================================= */
+
+  const characterCount = formData.description.length;
+
+  /* =======================================================
+     DISPLAY
+  ======================================================= */
 
   return (
-    <DashboardLayout>
-      <div className="page-header-text">
-        <h1>Add new crop listing</h1>
-        <p>Fill in the details of your produce</p>
-      </div>
+    <FarmerLayout>
+      <main className="add-listing-page">
+        <div className="add-listing-container">
+          {/* =================================================
+              HEADER
+          ================================================= */}
 
-      {error && <p className="form-error">{error}</p>}
-      <form className="add-listing" onSubmit={handleSubmit}>
-        <div className="form-fields">
-          <div className="form-field-left">
-            <div className="crop-type">
-              <label htmlFor="categories">Crop type</label>
-              <select
-                name="cropType"
-                id="categories"
-                value={formData.cropType}
-                onChange={handleChange}>
-                <option value="Rice">Rice</option>
-                <option value="Tomatoes">Tomatoes</option>
-                <option value="Yams">Yams</option>
-                <option value="Potatoes">Potatoes</option>
-                <option value="Maize">Maize</option>
-                <option value="Cassava">Cassava</option>
-                <option value="Beans">Beans</option>
-                <option value="Garri">Garri</option>
-              </select>
-            </div>
-            <div className="price">
-              <label htmlFor="price-per-kg">Price per kg ($)</label>
-              <input
-                type="text"
-                id="price-per-kg"
-                name="pricePerKg"
-                value={formData.pricePerKg}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="location">
-              <div className="state-field">
-                <label htmlFor="state">State</label>
-                <select
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleStateChange}>
-                  <option value="" disabled>
-                    Select state
-                  </option>
-                  {STATES.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
+          <header className="add-listing-header">
+            <h1>Add new crop listing</h1>
+
+            <p>Fill in the details of your produce</p>
+          </header>
+
+          {/* =================================================
+              MAIN CONTENT
+          ================================================= */}
+
+          <form className="add-listing-content" onSubmit={handleSubmit}>
+            {/* =================================================
+                LEFT SIDE
+            ================================================= */}
+
+            <div className="add-listing-form">
+              {/* =================================================
+                  CROP TYPE + QUANTITY
+              ================================================= */}
+
+              <div className="form-row">
+                {/* Crop type */}
+
+                <div className="form-group">
+                  <label htmlFor="produceName">Crop type</label>
+
+                  <div className="select-wrapper">
+                    <select
+                      id="produceName"
+                      name="produceName"
+                      value={formData.produceName}
+                      onChange={handleChange}
+                    >
+                      <option value="Tomatoes">Tomatoes</option>
+
+                      <option value="Cabbage">Cabbage</option>
+
+                      <option value="Cassava">Cassava</option>
+
+                      <option value="Maize">Maize</option>
+
+                      <option value="Potato">Potato</option>
+                    </select>
+
+                    <ChevronDown size={24} />
+                  </div>
+                </div>
+
+                {/* Quantity */}
+
+                <div className="form-group">
+                  <label htmlFor="quantity">Quantity</label>
+
+                  <div className="quantity-wrapper">
+                    <input
+                      type="number"
+                      id="quantity"
+                      name="quantity"
+                      min="1"
+                      step="1"
+                      value={formData.quantity}
+                      onChange={handleQuantityChange}
+                      required
+                    />
+
+                    <select
+                      name="unit"
+                      value={formData.unit}
+                      onChange={handleChange}
+                    >
+                      <option value="kg">kg</option>
+
+                      <option value="bags">bags</option>
+
+                      <option value="tons">tons</option>
+
+                      <option value="pieces">pieces</option>
+
+                      <option value="litres">litres</option>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div className="state-field">
-                <label htmlFor="city">City / LGA</label>
-                <select
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  disabled={!formData.state}>
-                  <option value="" disabled>
-                    {formData.state
-                      ? 'Select city / LGA'
-                      : 'Select a state first'}
-                  </option>
-                  {lgasList.map((lga) => (
-                    <option key={lga} value={lga}>
-                      {lga}
-                    </option>
-                  ))}
-                </select>
+
+              {/* =================================================
+                  PRICE + TOTAL
+              ================================================= */}
+
+              <div className="form-row">
+                {/* Price per kg */}
+
+                <div className="form-group">
+                  <label htmlFor="pricePerKg">Price per kg ($)</label>
+
+                  <input
+                    type="number"
+                    id="pricePerKg"
+                    name="pricePerKg"
+                    min="0"
+                    step="0.01"
+                    value={formData.pricePerKg}
+                    onChange={handlePricePerKgChange}
+                    required
+                  />
+                </div>
+
+                {/* Total price */}
+
+                <div className="form-group">
+                  <label htmlFor="price">Total price ($)</label>
+
+                  <input
+                    type="text"
+                    id="price"
+                    value={Number(formData.price || 0).toLocaleString()}
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              {/* =================================================
+                  LOCATION + DATE
+              ================================================= */}
+
+              <div className="form-row">
+                {/* Location */}
+
+                <div className="form-group">
+                  <label htmlFor="location">Location</label>
+
+                  <div className="icon-input">
+                    <MapPin size={25} />
+
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      minLength="3"
+                      maxLength="100"
+                      required
+                    />
+
+                    <ChevronDown size={24} />
+                  </div>
+                </div>
+
+                {/* Available date */}
+
+                <div className="form-group">
+                  <label htmlFor="availableFrom">Available from</label>
+
+                  <div className="icon-input">
+                    <CalendarDays size={25} />
+
+                    <input
+                      type="date"
+                      id="availableFrom"
+                      name="availableFrom"
+                      value={formData.availableFrom}
+                      min={today}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* =================================================
+                  DESCRIPTION
+              ================================================= */}
+
+              <div className="form-group description-group">
+                <label htmlFor="description">Description</label>
+
+                <div className="description-wrapper">
+                  <textarea
+                    id="description"
+                    name="description"
+                    maxLength="250"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <span className="character-count">{characterCount}/250</span>
+                </div>
+              </div>
+
+              {/* =================================================
+                  BUTTONS
+              ================================================= */}
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Cancel
+                </button>
+
+                <button type="submit" className="publish-button">
+                  Publish listing
+                </button>
               </div>
             </div>
-          </div>
 
-          <div className="form-field-left">
-            <div className="quantity">
-              <label htmlFor="quantity">Quantity</label>
-              <input
-                type="text"
-                id="quantity"
-                name="quantity"
-                value={formData.quantity}
-                onChange={handleChange}
-              />
+            {/* =================================================
+                RIGHT SIDE - PHOTO PANEL
+            ================================================= */}
+
+            <div className="photo-panel">
+              {/* Main image */}
+
+              {imagePreview ? (
+                <div className="main-photo">
+                  <img
+                    src={imagePreview}
+                    alt={`${formData.produceName} produce`}
+                  />
+
+                  <button
+                    type="button"
+                    className="remove-photo"
+                    onClick={removeImage}
+                    aria-label="Remove photo"
+                  >
+                    <X size={28} />
+                  </button>
+                </div>
+              ) : (
+                <div className="empty-photo">
+                  <span>No photo selected</span>
+                </div>
+              )}
+
+              {/* Add more photos */}
+
+              <label className="add-more-photos">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  hidden
+                />
+
+                <Plus size={30} />
+
+                <span>Add more photos</span>
+
+                <small>(Max 4 photos)</small>
+              </label>
             </div>
-            <div className="price">
-              <label htmlFor="total-price">Total price ($)</label>
-              <input
-                type="text"
-                id="total-price"
-                name="totalPrice"
-                value={formData.totalPrice}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="availability">
-              <label htmlFor="availability-date">Available from</label>
-              <input
-                type="date"
-                id="availability-date"
-                name="availableFrom"
-                value={formData.availableFrom}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="description">
-            <label htmlFor="description">Description</label>
-            <textarea
-              name="description"
-              id="description"
-              cols={50}
-              rows={10}
-              placeholder="Describe your produce..."
-              value={formData.description}
-              onChange={handleChange}
-            />
-          </div>
+          </form>
         </div>
-        <div className="img-field">
-          <div className="img-field-header">
-            <label>
-              Produce image <span className="required-asterisk">*</span>
-            </label>
-            <p>Add a clear photo of your produce</p>
-          </div>
-
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            hidden
-          />
-
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="img-dropzone">
-            {formData.imagePreview ? (
-              <img
-                src={formData.imagePreview}
-                alt="Produce preview"
-                className="img-field-preview"
-              />
-            ) : (
-              <>
-                <Upload className="img-dropzone-icon" />
-                <p className="img-dropzone-title">Upload photos</p>
-                <p className="img-dropzone-subtitle">or drag and drop</p>
-                <p className="img-dropzone-caption">PNG, JPG up to 5MB</p>
-              </>
-            )}
-          </div>
-
-          <button
-            type="button"
-            className="btn-outline img-upload-btn"
-            onClick={() => fileInputRef.current?.click()}>
-            <Upload size={16} />
-            {formData.imagePreview ? 'Change photo' : 'Upload photo'}
-          </button>
-        </div>
-
-        <div className="form-actions">
-          <button
-            type="button"
-            className="btn-outline"
-            onClick={() => navigate('/listings')}>
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary">
-            Publish listing
-          </button>
-        </div>
-      </form>
-    </DashboardLayout>
+      </main>
+    </FarmerLayout>
   );
 }
+
+export default AddListing;

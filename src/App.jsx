@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Layout from "./components/Layout";
 
-// Existing dashboard pages
+// Dashboard pages
 import Crops from "./pages/Crops";
 import BuyerRequests from "./pages/BuyerRequests";
 import Orders from "./pages/Orders";
@@ -19,45 +19,49 @@ import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
-// Listing feature
-import { ListingsProvider } from "./pages/ListingsContext";
-import MyListings from "./pages/MyListings";
+// Listing pages
 import AddListing from "./pages/AddListing";
+import ListingPublished from "./pages/ListingPublished";
 
 function App() {
   return (
-    <ListingsProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public pages */}
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+    <BrowserRouter>
+      <Routes>
+        {/* Public pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
 
-          {/* Dashboard */}
-          <Route path="/dashboard" element={<Dashboard />} />
+        {/* Dashboard */}
+        <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Dashboard layout */}
-          <Route path="/app" element={<Layout />}>
-            <Route index element={<Dashboard />} />
+        {/* Dashboard layout */}
+        <Route path="/app" element={<Layout />}>
+          <Route index element={<Dashboard />} />
 
-            {/* Existing dashboard pages */}
-            <Route path="listings" element={<Crops />} />
-            <Route path="requests" element={<BuyerRequests />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="messages" element={<Messages />} />
-            <Route path="payments" element={<Payments />} />
-            <Route path="market-insights" element={<Analytics />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
+          {/* Dashboard pages */}
+          <Route path="listings" element={<Crops />} />
+          <Route path="requests" element={<BuyerRequests />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="market-insights" element={<Analytics />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
 
-            {/* Listing management */}
-            <Route path="my-listings" element={<MyListings />} />
-            <Route path="listings/add" element={<AddListing />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ListingsProvider>
+          {/* Listing management */}
+          <Route path="add-listing" element={<AddListing />} />
+          <Route path="listing-published" element={<ListingPublished />} />
+        </Route>
+
+        {/* Direct listing routes */}
+        <Route path="/add-listing" element={<AddListing />} />
+        <Route
+          path="/listing-published"
+          element={<ListingPublished />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

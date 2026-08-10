@@ -1,0 +1,264 @@
+/* ========================================
+   FARMER LAYOUT
+======================================== */
+
+.farmer-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #ffffff;
+}
+
+/* ========================================
+   DESKTOP SIDEBAR CONTAINER
+======================================== */
+
+.farmer-sidebar-container {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 285px;
+  height: 100vh;
+
+  z-index: 100;
+}
+
+/* ========================================
+   MAIN CONTENT
+======================================== */
+
+.farmer-main {
+  width: auto;
+  min-height: 100vh;
+
+  margin-left: 285px;
+
+  box-sizing: border-box;
+}
+
+/* ========================================
+   MOBILE HEADER
+======================================== */
+
+.mobile-header {
+  display: none;
+}
+
+/* ========================================
+   MOBILE SIDEBAR BUTTON
+======================================== */
+
+.mobile-sidebar-button {
+  display: none;
+
+  padding: 4px 6px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #263142;
+
+  cursor: pointer;
+}
+
+/* ========================================
+   MOBILE CLOSE BUTTON
+======================================== */
+
+.mobile-close-button {
+  display: none;
+}
+
+/* ========================================
+   SIDEBAR OVERLAY
+======================================== */
+
+.sidebar-overlay {
+  display: none;
+}
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 1000px) and (min-width: 901px) {
+  .farmer-sidebar-container {
+    width: 220px;
+  }
+
+  .farmer-main {
+    margin-left: 220px;
+  }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 900px) {
+  .mobile-header {
+    position: relative;
+
+    width: 100%;
+    height: 130px;
+
+    display: flex;
+    align-items: flex-end;
+
+    padding: 0 0 12px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+  }
+
+  /* Menu button
+     Figma:
+     width: 38px
+     height: 24px
+     left: 30px
+  */
+
+  .mobile-sidebar-button {
+    position: absolute;
+
+    left: 30px;
+    bottom: 16px;
+
+    width: 38px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 4px 6px;
+  }
+
+  /* Ubani logo
+     Figma:
+     width: 68px
+     height: 29px
+     left: 78px
+  */
+
+  .mobile-logo {
+    position: absolute;
+
+    left: 78px;
+    bottom: 11px;
+
+    width: 68px;
+    height: 29px;
+
+    display: flex;
+    align-items: center;
+
+    color: #2e7d32;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    font-style: normal;
+
+    line-height: 100%;
+    letter-spacing: 0;
+  }
+
+  /* Sidebar becomes a drawer */
+
+  .farmer-sidebar-container {
+    width: 285px;
+    height: 100vh;
+
+    transform: translateX(-100%);
+
+    transition: transform 0.25s ease;
+
+    background: #ffffff;
+  }
+
+  .farmer-sidebar-container.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* Main content uses full width */
+
+  .farmer-main {
+    width: 100%;
+    min-height: 100vh;
+
+    margin-left: 0;
+  }
+
+  /* Close button */
+
+  .mobile-close-button {
+    position: absolute;
+
+    top: 18px;
+    right: 18px;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #aeb3ba;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #263142;
+
+    cursor: pointer;
+
+    z-index: 110;
+  }
+
+  /* Overlay */
+
+  .sidebar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+
+    border: none;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    cursor: pointer;
+
+    z-index: 95;
+  }
+}
+
+/* ========================================
+   SMALL MOBILE
+======================================== */
+
+@media (max-width: 600px) {
+  .mobile-header {
+    height: 130px;
+  }
+
+  .farmer-sidebar-container {
+    width: 85vw;
+    max-width: 285px;
+  }
+}

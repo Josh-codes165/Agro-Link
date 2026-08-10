@@ -2,19 +2,6 @@ import React from "react";
 import "../styles/SignUp.css"
 import bgImage from "./../assets/plant-bg.png";
 
-// function bgImage() {
-//     return (
-//         <div style={{
-//             backgroundImage: `url(${bgImage})`,
-//             backgroundSize: 'cover',
-//             backgroundPosition: 'center',
-//             backgroundRepeat: 'no-repeat',
-//             width: '100%',
-//             height: '500px',
-//         }}></div>
-//     )
-// }
-
 export default function SignUp() {
     return (
 

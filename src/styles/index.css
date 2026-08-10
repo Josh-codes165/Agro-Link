@@ -1,3 +1,4 @@
+/* index.css — styles for the Home / landing page only. Uses variables from global.css. */
 
 /* Design System From the Figma File you are to link this to all the pages html file and use through the variable name var(--variable-name) */
 
@@ -96,7 +97,7 @@
   --container-max: 1200px;
 }
 
-/* Rest */
+/* Reset */
 *,
 *::before,
 *::after {
@@ -108,11 +109,111 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-body {
-  background: var(--color-bg);
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+  margin-right: 2rem;
+}
+ 
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  padding: var(--space-5) 0;
+  position: sticky;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-white); 
+  box-shadow: var(--shadow-default);
+  max-height: 100vh;
+  height: 100vh;
+}
+ 
+.logo {
+  width: 100%;
+  padding-left: var(--space-6);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary);
+}
+ 
+.sidebar-nav {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+ 
+.nav-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+ 
+.nav-group li, .nav-items2 li {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center; 
+}
+
+
+.nav-item {
+  display: grid;
+  grid-template-columns: 24px 1fr; 
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-h4);
   color: var(--color-text);
-  font-family: var(--font-family-base);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
-  -webkit-font-smoothing: antialiased;
+  text-decoration: none;
+  width: 160px; 
+  text-align: left;
+}
+
+
+.nav-group li svg,
+.nav-items2 li svg {
+  color: var(--color-text);
+}
+ 
+.nav-items2 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-top: var(--border-width) solid var(--color-border-strong);
+}
+ 
+ 
+.nav-group-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  border-top: var(--border-width) solid var(--color-border-strong);
+  padding-top: var(--space-5);
+}
+ 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-h4);
+  color: var(--color-text);
+  text-decoration: none;
+  
+}
+ 
+.main {
+  padding: var(--space-6);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  margin-top: 5rem;
+
 }

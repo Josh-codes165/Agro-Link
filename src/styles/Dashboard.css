@@ -27,77 +27,6 @@
 }
 
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.dashboard .sidebar {
-  width: 246px;
-  min-width: 246px;
-  min-height: 100vh;
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
-  padding: 24px 18px;
-  flex-shrink: 0;
-}
-
-.dashboard .logo {
-  color: #168a4a;
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 35px 12px;
-  letter-spacing: 0.5px;
-}
-
-.dashboard .sidebar ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dashboard .sidebar li {
-  margin: 5px 0;
-  padding: 0;
-}
-
-.dashboard .nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: 7px;
-  text-decoration: none;
-  color: #4b5563;
-  font-size: 13px;
-  font-weight: 500;
-  transition: 0.2s ease;
-  box-sizing: border-box;
-}
-
-.dashboard .nav-link svg {
-  font-size: 16px;
-  min-width: 16px;
-  flex-shrink: 0;
-  stroke-width: 2;
-}
-
-.dashboard .nav-link:hover {
-  background: #f0f8f3;
-  color: #168a4a;
-}
-
-.dashboard .nav-link.active {
-  background: #e9f7ef;
-  color: #168a4a;
-  font-weight: 600;
-}
-
-.dashboard .sidebar hr {
-  border: none;
-  border-top: 1px solid #eeeeee;
-  margin: 25px 0;
-}
 
 
 /* =========================================================
@@ -514,10 +443,6 @@
 }
 
 
-/* =========================================================
-   BUTTONS
-========================================================= */
-
 .dashboard .add-btn {
   display: inline-block;
   text-decoration: none;
@@ -591,9 +516,7 @@
 }
 
 
-/* =========================================================
-   MARKET PRICE
-========================================================= */
+
 
 .dashboard .market-card h2 {
   margin-bottom: 22px;
@@ -633,9 +556,6 @@
 }
 
 
-/* =========================================================
-   ACTIVITIES
-========================================================= */
 
 .dashboard .activity {
   padding: 12px 0;
@@ -659,9 +579,7 @@
 }
 
 
-/* =========================================================
-   GENERAL PAGE CONTENT
-========================================================= */
+
 
 .dashboard .page-subtitle {
   margin-top: 5px;
@@ -693,9 +611,7 @@
 }
 
 
-/* =========================================================
-   MY LISTINGS
-========================================================= */
+
 
 .dashboard .listing-summary {
   display: grid;
@@ -729,9 +645,7 @@
 }
 
 
-/* =========================================================
-   PAGE ACTIONS
-========================================================= */
+
 
 .dashboard .page-actions {
   display: flex;
@@ -758,9 +672,7 @@
 }
 
 
-/* =========================================================
-   CROP FORM
-========================================================= */
+
 
 .dashboard .crop-form {
   width: 100%;
@@ -780,9 +692,7 @@
 }
 
 
-/* =========================================================
-   FORM GRID
-========================================================= */
+
 
 .dashboard .form-grid {
   display: grid;
@@ -818,9 +728,6 @@
 }
 
 
-/* =========================================================
-   FORM BUTTONS
-========================================================= */
 
 .dashboard .form-buttons {
   display: flex;
@@ -851,9 +758,7 @@
 }
 
 
-/* =========================================================
-   LISTING COUNT
-========================================================= */
+
 
 .dashboard .listing-count {
   display: inline-flex;
@@ -869,9 +774,6 @@
 }
 
 
-/* =========================================================
-   LISTINGS CARD
-========================================================= */
 
 .dashboard .listings-card {
   width: 100%;
@@ -891,9 +793,7 @@
 }
 
 
-/* =========================================================
-   TABLE WRAPPER
-========================================================= */
+
 
 .dashboard .table-wrapper {
   width: 100%;
@@ -946,9 +846,7 @@
 }
 
 
-/* =========================================================
-   EMPTY STATE
-========================================================= */
+
 
 .dashboard .empty-state {
   height: 150px;
@@ -968,9 +866,7 @@
 }
 
 
-/* =========================================================
-   LISTING ACTION BUTTONS
-========================================================= */
+
 
 .dashboard .listings-card .edit-btn,
 .dashboard .listings-card .delete-btn,
@@ -1022,10 +918,6 @@
 }
 
 
-/* =========================================================
-   BACK LINK
-========================================================= */
-
 .dashboard .back-link {
   display: inline-flex;
   align-items: center;
@@ -1046,9 +938,7 @@
 }
 
 
-/* =========================================================
-   BUYER REQUESTS
-========================================================= */
+
 
 .dashboard .buyer-requests-page {
   width: 100%;
@@ -1083,9 +973,7 @@
 }
 
 
-/* =========================================================
-   ORDERS
-========================================================= */
+
 
 .dashboard .orders-page,
 .dashboard .messages-page,
@@ -1188,9 +1076,7 @@
 }
 
 
-/* =========================================================
-   MESSAGES
-========================================================= */
+
 
 .dashboard .messages-summary {
   display: grid;
@@ -1254,9 +1140,6 @@
 }
 
 
-/* =========================================================
-   PAYMENTS
-========================================================= */
 
 .dashboard .payments-summary {
   display: grid;
@@ -1267,9 +1150,7 @@
 }
 
 
-/* =========================================================
-   PROFILE PAGE
-========================================================= */
+
 
 .dashboard .profile-page {
   width: 100%;

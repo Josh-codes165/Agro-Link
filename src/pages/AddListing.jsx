@@ -48,8 +48,16 @@ export default function AddListing() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const previewUrl = URL.createObjectURL(file);
-    setFormData((prev) => ({ ...prev, imagePreview: previewUrl }));
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({ ...prev, imagePreview: reader.result }));
+    };
+    reader.onerror = () => {
+      console.error('Failed to read image file');
+      setError('Could not read the selected image. Please try another file.');
+    };
+    reader.readAsDataURL(file);
   };
 
   const validateForm = () => {
@@ -74,7 +82,22 @@ export default function AddListing() {
     }
 
     addListing(formData);
-    navigate('/listings');
+
+    // Build the object ListingPublished.jsx expects, and hand it off via localStorage
+    const publishedListing = {
+      produceName: formData.cropType,
+      quantity: formData.quantity,
+      unit: 'kg',
+      price: formData.totalPrice,
+      pricePerKg: formData.pricePerKg,
+      location: `${formData.city}, ${formData.state}`,
+      image: formData.imagePreview,
+      listedOn: new Date().toISOString().slice(0, 10),
+    };
+
+    localStorage.setItem('ubaniListing', JSON.stringify(publishedListing));
+
+    navigate('/listing-published');
   };
 
   return (

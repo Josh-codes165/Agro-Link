@@ -165,6 +165,17 @@ html {
   justify-content: center; 
 }
 
+ li:hover  {
+  background: #f0f8f3;
+  color: #168a4a;
+}
+
+.dashboard .nav-link.active {
+  background: #e9f7ef;
+  color: #168a4a;
+  font-weight: 600;
+}
+
 
 .nav-item {
   display: grid;
@@ -178,6 +189,15 @@ html {
   text-align: left;
 }
 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-h4);
+  color: var(--color-text);
+  text-decoration: none;
+  
+}
 
 .nav-group li svg,
 .nav-items2 li svg {
@@ -200,15 +220,7 @@ html {
   padding-top: var(--space-5);
 }
  
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: var(--fs-h4);
-  color: var(--color-text);
-  text-decoration: none;
-  
-}
+
  
 .main {
   padding: var(--space-6);

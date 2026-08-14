@@ -59,8 +59,6 @@ export default function DashboardLayout({ children }) {
           </button>
         </div>
 
-        <div className="logo">Ubani</div>
-
         <div className="sidebar-nav">
           <ul className="nav-group">
             {NAV_ITEMS.map(({ icon: Icon, label, href }) => (
@@ -68,7 +66,6 @@ export default function DashboardLayout({ children }) {
                 <Icon size={18} />
                 <NavLink
                   to={href}
-                  onClick={closeSidebar}
                   onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
@@ -86,7 +83,6 @@ export default function DashboardLayout({ children }) {
                 <NavLink
                   to="/profile"
                   onClick={closeSidebar}
-                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
@@ -97,7 +93,6 @@ export default function DashboardLayout({ children }) {
                 <Settings size={18} />
                 <NavLink
                   to="/settings"
-                  onClick={closeSidebar}
                   onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`

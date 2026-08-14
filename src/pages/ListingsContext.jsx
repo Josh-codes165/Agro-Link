@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
-const ListingsContext = createContext(null);
+export const ListingsContext = createContext(null);
 
 const STORAGE_KEY = 'ubani_listings';
 
@@ -30,10 +30,7 @@ export function ListingsProvider({ children }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
     } catch (error) {
-      console.error(
-        'Could not save listings (storage limit likely exceeded):',
-        error,
-      );
+      console.error('Could not save listings (storage limit likely exceeded):', error);
     }
   }, [listings]);
 
@@ -63,14 +60,4 @@ export function ListingsProvider({ children }) {
       {children}
     </ListingsContext.Provider>
   );
-}
-
-export function useListings() {
-  const context = useContext(ListingsContext);
-
-  if (!context) {
-    throw new Error('useListings must be used within ListingsProvider');
-  }
-
-  return context;
 }

@@ -71,9 +71,6 @@ export default function DashboardLayout({ children }) {
                 </NavLink>
               </li>
             </div>
-
-            <li>
-              <LogOut size={18} />
               <li>
                 <LogOut size={18} />
                 <NavLink
@@ -84,7 +81,6 @@ export default function DashboardLayout({ children }) {
                   Log out
                 </NavLink>
               </li>
-            </li>
           </ul>
         </div>
       </aside>

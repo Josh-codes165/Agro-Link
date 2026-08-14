@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -11,6 +12,8 @@ import {
   UserRoundPen,
   Settings,
   LogOut,
+  Menu,
+  X,
   Menu,
   X,
 } from 'lucide-react';
@@ -30,6 +33,10 @@ const NAV_ITEMS = [
 ];
 
 export default function DashboardLayout({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeSidebar = () => setIsOpen(false);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const closeSidebar = () => setIsOpen(false);
@@ -69,6 +76,7 @@ export default function DashboardLayout({ children }) {
                 <NavLink
                   to={href}
                   onClick={closeSidebar}
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
@@ -85,6 +93,7 @@ export default function DashboardLayout({ children }) {
                 <NavLink
                   to="/profile"
                   onClick={closeSidebar}
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
@@ -95,6 +104,7 @@ export default function DashboardLayout({ children }) {
                 <Settings size={18} />
                 <NavLink
                   to="/settings"
+                  onClick={closeSidebar}
                   onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -12,8 +11,6 @@ import {
   UserRoundPen,
   Settings,
   LogOut,
-  Menu,
-  X,
   Menu,
   X,
 } from 'lucide-react';
@@ -33,10 +30,6 @@ const NAV_ITEMS = [
 ];
 
 export default function DashboardLayout({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const closeSidebar = () => setIsOpen(false);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const closeSidebar = () => setIsOpen(false);

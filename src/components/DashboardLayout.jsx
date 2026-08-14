@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -10,6 +11,8 @@ import {
   UserRoundPen,
   Settings,
   LogOut,
+  Menu,
+  X,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -25,11 +28,37 @@ const NAV_ITEMS = [
     href: '/market-insights',
   },
 ];
+
 export default function DashboardLayout({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeSidebar = () => setIsOpen(false);
+
   return (
     <div className="dashboard-shell">
-      {/* Sidebar navigation — fixed across all dashboard pages */}
-      <aside className="sidebar">
+      <div className="mobile-topbar">
+        <div className="logo">Ubani</div>
+        <button
+          className="hamburger-btn"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open menu">
+          <Menu size={22} />
+        </button>
+      </div>
+
+      {isOpen && <div className="sidebar-overlay" onClick={closeSidebar} />}
+
+      <aside className={`sidebar${isOpen ? ' sidebar-open' : ''}`}>
+        <div className="sidebar-header">
+          <div className="logo">Ubani</div>
+          <button
+            className="close-btn"
+            onClick={closeSidebar}
+            aria-label="Close menu">
+            <X size={20} />
+          </button>
+        </div>
+
         <div className="logo">Ubani</div>
 
         <div className="sidebar-nav">
@@ -39,6 +68,7 @@ export default function DashboardLayout({ children }) {
                 <Icon size={18} />
                 <NavLink
                   to={href}
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
@@ -48,12 +78,13 @@ export default function DashboardLayout({ children }) {
             ))}
           </ul>
 
-          <ul className="nav-items2">
-            <div className="nav-group-2">
+          <div className="nav-items2">
+            <ul className="nav-group-2">
               <li>
                 <UserRoundPen size={18} />
                 <NavLink
                   to="/profile"
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
@@ -64,32 +95,32 @@ export default function DashboardLayout({ children }) {
                 <Settings size={18} />
                 <NavLink
                   to="/settings"
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
                   Settings
                 </NavLink>
               </li>
-            </div>
+            </ul>
 
-            <li>
-              <LogOut size={18} />
+            <ul>
               <li>
                 <LogOut size={18} />
                 <NavLink
                   to="/login"
+                  onClick={closeSidebar}
                   className={({ isActive }) =>
                     `nav-item${isActive ? ' active' : ''}`
                   }>
                   Log out
                 </NavLink>
               </li>
-            </li>
-          </ul>
+            </ul>
+          </div>
         </div>
       </aside>
 
-      {/* Page content — changes per dashboard page */}
       <main className="main">{children}</main>
     </div>
   );

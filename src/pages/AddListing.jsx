@@ -73,32 +73,44 @@ export default function AddListing() {
     return null;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const validationError = validateForm();
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
 
-    addListing(formData);
-
-    // Build the object ListingPublished.jsx expects, and hand it off via localStorage
-    const publishedListing = {
-      produceName: formData.cropType,
-      quantity: formData.quantity,
-      unit: 'kg',
-      price: formData.totalPrice,
-      pricePerKg: formData.pricePerKg,
-      location: `${formData.city}, ${formData.state}`,
-      image: formData.imagePreview,
-      listedOn: new Date().toISOString().slice(0, 10),
-    };
-
-    localStorage.setItem('ubaniListing', JSON.stringify(publishedListing));
-
-    navigate('/listing-published');
+  const publishedListing = {
+    produceName: formData.cropType,
+    cropType: formData.cropType,
+    quantity: formData.quantity,
+    unit: 'kg',
+    price: formData.totalPrice,
+    pricePerKg: formData.pricePerKg,
+    city: formData.city,
+    state: formData.state,
+    location: `${formData.city}, ${formData.state}`,
+    availableFrom: formData.availableFrom,
+    description: formData.description,
+    image: formData.imagePreview,
+    imagePreview: formData.imagePreview,
+    listedOn: new Date().toISOString().slice(0, 10),
   };
+
+  addListing(publishedListing);
+
+  try {
+    localStorage.setItem('ubaniListing', JSON.stringify(publishedListing));
+  } catch (storageError) {
+    console.error(
+      'Could not cache published listing (storage limit likely exceeded):',
+      storageError,
+    );
+  }
+
+  navigate('/listing-published', { state: { listing: publishedListing } });
+};
 
   return (
     <DashboardLayout>

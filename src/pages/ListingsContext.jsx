@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const ListingsContext = createContext(null);
+
 const STORAGE_KEY = 'ubani_listings';
 
 let nextId = 1;
@@ -8,36 +9,53 @@ let nextId = 1;
 function loadInitialListings() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
+
     if (!stored) return [];
+
     const parsed = JSON.parse(stored);
-    nextId = parsed.reduce((max, l) => Math.max(max, l.id + 1), 1);
+
+    nextId = parsed.reduce((max, item) => Math.max(max, item.id || 0), 0) + 1;
+
     return parsed;
-  } catch (err) {
-    console.error('Failed to load listings from localStorage', err);
+  } catch (error) {
+    console.error('Failed to load listings:', error);
     return [];
   }
 }
+
 export function ListingsProvider({ children }) {
   const [listings, setListings] = useState(loadInitialListings);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
+    } catch (error) {
+      console.error(
+        'Could not save listings (storage limit likely exceeded):',
+        error,
+      );
+    }
   }, [listings]);
 
-  const addListing = (formData) => {
-    setListings((prev) => [
-      ...prev,
-      {
-        id: nextId++,
-        title: formData.cropType,
-        price: formData.pricePerKg,
-        location: `${formData.city}, ${formData.state}`,
-        status: 'Active',
-        views: 0,
-        requests: 0,
-        ...formData,
-      },
-    ]);
+  const addListing = (listing) => {
+    const newListing = {
+      id: nextId++,
+      cropType: listing.cropType,
+      quantity: listing.quantity,
+      unit: listing.unit,
+      price: listing.price,
+      pricePerKg: listing.pricePerKg,
+      city: listing.city,
+      state: listing.state,
+      location: listing.location,
+      availableFrom: listing.availableFrom,
+      imagePreview: listing.imagePreview,
+      status: 'active',
+      views: 0,
+      requests: 0,
+    };
+
+    setListings((prev) => [...prev, newListing]);
   };
 
   return (
@@ -49,8 +67,10 @@ export function ListingsProvider({ children }) {
 
 export function useListings() {
   const context = useContext(ListingsContext);
+
   if (!context) {
-    throw new Error('useListings must be used inside a ListingsProvider');
+    throw new Error('useListings must be used within ListingsProvider');
   }
+
   return context;
 }

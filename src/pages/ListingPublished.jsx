@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
   Sprout,
@@ -15,10 +15,6 @@ import DashboardLayout from '../components/DashboardLayout';
 
 import '../styles/ListingPublished.css';
 
-/* =========================================================
-   CROP IMAGES
-========================================================= */
-
 const cropImages = {
   Tomatoes: '/images/Tomatoes.jpg',
   Cabbage: '/images/Cabbage.jpg',
@@ -26,10 +22,6 @@ const cropImages = {
   Maize: '/images/Maize.jpg',
   Potato: '/images/Potato.jpg',
 };
-
-/* =========================================================
-   FORMAT DATE
-========================================================= */
 
 function formatDate(dateValue) {
   if (!dateValue) return '';
@@ -47,20 +39,15 @@ function formatDate(dateValue) {
   });
 }
 
-/* =========================================================
-   LISTING PUBLISHED
-========================================================= */
-
 function ListingPublished() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [listing, setListing] = useState(null);
-
-  /* =======================================================
-     GET SAVED LISTING
-  ======================================================= */
+  const [listing, setListing] = useState(location.state?.listing || null);
 
   useEffect(() => {
+    if (listing) return;
+
     const savedListing = localStorage.getItem('ubaniListing');
 
     if (savedListing) {
@@ -70,11 +57,7 @@ function ListingPublished() {
         console.error('Could not read saved listing:', error);
       }
     }
-  }, []);
-
-  /* =======================================================
-     FALLBACK DATA
-  ======================================================= */
+  }, [listing]);
 
   const displayListing = listing || {
     produceName: 'Tomatoes',
@@ -87,10 +70,6 @@ function ListingPublished() {
     listedOn: '2026-08-08',
   };
 
-  /* =======================================================
-     CALCULATIONS
-  ======================================================= */
-
   const quantity = Number(displayListing.quantity) || 0;
 
   const totalPrice = Number(displayListing.price) || 0;
@@ -100,34 +79,18 @@ function ListingPublished() {
 
   const pricePerKg = displayListing.pricePerKg || calculatedPricePerKg;
 
-  /* =======================================================
-     IMAGE
-  ======================================================= */
-
   const listingImage =
     displayListing.image ||
     cropImages[displayListing.produceName] ||
     cropImages.Tomatoes;
 
-  /* =======================================================
-     DATE
-  ======================================================= */
-
   const listedDate = formatDate(
     displayListing.listedOn || displayListing.availableFrom,
   );
 
-  /* =======================================================
-     DISPLAY
-  ======================================================= */
-
   return (
     <DashboardLayout>
       <section className="listing-published">
-        {/* =================================================
-            SUCCESS MESSAGE
-        ================================================= */}
-
         <div className="published-success">
           <div className="success-icon">
             <Check size={72} strokeWidth={1.8} />
@@ -136,20 +99,14 @@ function ListingPublished() {
           <h1>Listing published successfully!</h1>
 
           <p>
-            Your {displayListing.produceName.toLowerCase()} is now live and
-            visible to
+            Your {(displayListing.produceName || 'listing').toLowerCase()} is
+            now live and visible to
             <br />
             verified buyers
           </p>
         </div>
 
-        {/* =================================================
-            LISTING CARD
-        ================================================= */}
-
         <div className="published-card">
-          {/* Product image */}
-
           <div className="published-image-container">
             <img
               src={listingImage}
@@ -161,11 +118,7 @@ function ListingPublished() {
             />
           </div>
 
-          {/* Listing details */}
-
           <div className="published-details">
-            {/* Crop */}
-
             <div className="published-detail">
               <div className="detail-icon">
                 <Sprout size={27} />
@@ -178,8 +131,6 @@ function ListingPublished() {
               </div>
             </div>
 
-            {/* Total price */}
-
             <div className="published-detail">
               <div className="detail-icon">
                 <Banknote size={27} />
@@ -191,8 +142,6 @@ function ListingPublished() {
                 <strong>{totalPrice.toLocaleString()}</strong>
               </div>
             </div>
-
-            {/* Quantity */}
 
             <div className="published-detail">
               <div className="detail-icon">
@@ -208,8 +157,6 @@ function ListingPublished() {
               </div>
             </div>
 
-            {/* Location */}
-
             <div className="published-detail">
               <div className="detail-icon">
                 <MapPin size={27} />
@@ -222,8 +169,6 @@ function ListingPublished() {
               </div>
             </div>
 
-            {/* Price */}
-
             <div className="published-detail">
               <div className="detail-icon">
                 <Tag size={27} />
@@ -235,8 +180,6 @@ function ListingPublished() {
                 <strong>{Number(pricePerKg).toLocaleString()}</strong>
               </div>
             </div>
-
-            {/* Listed date */}
 
             <div className="published-detail">
               <div className="detail-icon">
@@ -252,24 +195,19 @@ function ListingPublished() {
           </div>
         </div>
 
-        {/* =================================================
-            WHAT'S NEXT
-        ================================================= */}
-
         <div className="whats-next">
-          <h2>What’s next?</h2>
+          <h2>What's next?</h2>
 
           <p>You can view your listing details or create another listing</p>
         </div>
 
-        {/* =================================================
-            ACTION BUTTONS
-        ================================================= */}
-
         <div className="published-actions">
           <button
             className="action-button primary"
-            onClick={() => navigate('/listings')}>
+            onClick={() => {
+              localStorage.removeItem('ubaniListing');
+              navigate('/listings');
+            }}>
             View my Listings
           </button>
           <button

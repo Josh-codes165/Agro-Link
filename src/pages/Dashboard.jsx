@@ -383,7 +383,7 @@ function Dashboard() {
                 </tbody>
               </table>
 
-              <NavLink to="/listings" className="add-btn">
+              <NavLink to="/listings/add" className="add-btn">
                 Add New Listing
               </NavLink>
             </div>

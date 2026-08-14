@@ -5,7 +5,7 @@
 .listing-published {
   min-height: 100vh;
 
-  padding: 55px 60px 70px;
+  padding: 0px 60px 70px;
 
   background: #ffffff;
 
@@ -266,7 +266,7 @@
 
 @media (max-width: 1100px) {
   .listing-published {
-    padding: 50px 40px;
+    padding: 0px 40px;
   }
 
   .published-card {
